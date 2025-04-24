@@ -150,7 +150,7 @@ function init() {
   chromaticAberrationPass.material.uniforms['aberrationIntensity'].value = 0.02; 
   composer.addPass(chromaticAberrationPass);
 
-  // Create grain pass and set uniforms
+  // Create Grain pass and set uniforms
   grainPass = new ShaderPass(GrainShader);
   grainPass.material.uniforms['grainIntensity'].value = 0.02;
   grainPass.material.uniforms['grainSize'].value = 5.0;
