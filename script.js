@@ -67,13 +67,29 @@ function init() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
 
-  // Tonemapping in renderer
-  renderer.toneMapping = THREE.NoToneMapping;
-  renderer.outputColorSpace = THREE.SRGBColorSpace;
-
   // Shadows
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  // Light
+  const light = new THREE.DirectionalLight(0xffffff, 5.0);
+  light.castShadow = true;
+
+  light.position.set(0, 10, 0);
+  light.target.position.set(-5, 0, 0);
+
+  // Optional: tweak shadow quality
+  light.shadow.mapSize.width = 1024;
+  light.shadow.mapSize.height = 1024;
+  light.shadow.camera.near = 0.5;
+  light.shadow.camera.far = 50;
+  light.shadow.camera.left = -10;
+  light.shadow.camera.right = 10;
+  light.shadow.camera.top = 10;
+  light.shadow.camera.bottom = -10;
+
+  scene.add(light);
+  scene.add(light.target);
 
   document.body.appendChild(renderer.domElement);
 
@@ -89,15 +105,6 @@ function init() {
   // Controls for camera movement
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
-
-  // Lighting setup
-  /*
-  const light = new THREE.DirectionalLight(0xffffff, 10.0);
-  light.position.set(0, 10, 0);
-  light.target.position.set(-5, 0, 0);
-  scene.add(light);
-  scene.add(light.target);
-  */
 
   // Load HDRI as environment map
   const pmremGenerator = new PMREMGenerator(renderer);
@@ -147,7 +154,6 @@ function init() {
 
   // Chromatic Aberration
   chromaticAberrationPass = new ShaderPass(ChromaticAberrationShader);
-  chromaticAberrationPass.material.uniforms['aberrationIntensity'].value = 0.02; 
   composer.addPass(chromaticAberrationPass);
 
   // Create Grain pass and set uniforms
@@ -245,6 +251,10 @@ function loadModel(path, position = new THREE.Vector3(), onLoad = () => {}) {
     const model = gltf.scene;
     model.position.copy(position);
     scene.add(model);
+
+    // Cast and recieve shadows
+    model.castShadow = true;
+    model.receiveShadow = true;
 
     if (gltf.animations.length > 0) {
       const mixer = new THREE.AnimationMixer(model);

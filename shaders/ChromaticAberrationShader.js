@@ -1,8 +1,9 @@
 const ChromaticAberrationShader = {
     uniforms: {
         'tDiffuse': { value: null },
-        'aberrationIntensity': { value: 0.1 }, // Controls the maximum intensity of the effect
-        'power': { value: 2.0 }
+        'aberrationIntensity': { value: 0.01 }, // Controls the maximum intensity of the effect
+        'power': { value: 2.0 },
+        'samples': { value: 4 }
     },
 
     vertexShader: /* glsl */`
@@ -18,6 +19,7 @@ const ChromaticAberrationShader = {
         uniform sampler2D tDiffuse;
         uniform float aberrationIntensity;
         uniform float power;
+        uniform int samples;
 
         varying vec2 vUv;
 
@@ -25,24 +27,38 @@ const ChromaticAberrationShader = {
             // Calculate the distance from the center (0.5, 0.5) in normalized UV space
             vec2 center = vec2(0.5);
             float dist = pow(distance(vUv, center), power);
+            vec2 direction = vUv * vec2(2) - vec2(1);
 
             // Apply a gradient: at the center, the effect is 0, and at the edges, the effect is 1
             float aberrationStrength = dist * aberrationIntensity;
 
-            // Offsets for the RGB channels
-            vec2 redOffset = vec2(aberrationStrength*0.0, aberrationStrength*0.0);   // Red channel will move horizontally
-            vec2 greenOffset = vec2(aberrationStrength*0.5, aberrationStrength*0.5); // Green channel will move vertically
-            vec2 blueOffset = vec2(aberrationStrength*1.0, aberrationStrength*1.0); // Blue moves both ways
+            vec2 redOffset;
+            vec2 greenOffset;
+            vec2 blueOffset;
 
-            // Sample the texture for each color channel with different offsets
-            vec4 texel = texture2D(tDiffuse, vUv);
-            vec4 red = texture2D(tDiffuse, vUv + redOffset);
-            vec4 green = texture2D(tDiffuse, vUv + greenOffset);
-            vec4 blue = texture2D(tDiffuse, vUv + blueOffset);
+            vec4 texel;
+            vec4 red = vec4(0.0);
+            vec4 green = vec4(0.0);
+            vec4 blue = vec4(0.0);
+
+            for (int i = 1; i <= samples; ++i) {
+                float scale = float(i);
+
+                red += texture2D(tDiffuse, vUv + direction * aberrationStrength * 0.33/float(samples) * scale);
+                green += texture2D(tDiffuse, vUv + direction * aberrationStrength * -0.66/float(samples) * scale);
+                blue += texture2D(tDiffuse, vUv + direction * aberrationStrength * -1.0/float(samples) * scale);
+            }
+
+            red /= float(samples);
+            green /= float(samples);
+            blue /= float(samples);
+
+                            
+            
 
             // Combine the color channels
             gl_FragColor = vec4(red.r, green.g, blue.b, texel.a);
-            // gl_FragColor = vec4(dist);
+            // gl_FragColor = vec4(direction, 0, 1);
         }
     `
 };
