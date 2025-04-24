@@ -254,3 +254,4 @@ function loadModel(path, position = new THREE.Vector3(), onLoad = () => {}) {
 
     onLoad(model);
   });
+}
