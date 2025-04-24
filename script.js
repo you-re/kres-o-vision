@@ -112,7 +112,7 @@ function init() {
     });
 
   // Load 3D model (GLTF)
-  loadModel('winnowing_basket_sim.glb', new THREE.Vector3(0, 0, 0));
+  loadModel('winnowing_basket_sim.gltf', new THREE.Vector3(0, 0, 0));
   
   // DOF
   /*
@@ -165,7 +165,7 @@ function init() {
   // ACES Tonemapping
   const ACESPass = new ShaderPass(ACESShader);
   ACESPass.material.uniforms['ACESBL_Gamma'].value = 2.2;
-  ACESPass.material.uniforms['toneMappingExposure'].value = 1.0;
+  ACESPass.material.uniforms['toneMappingExposure'].value = 0.5;
   composer.addPass(ACESPass);
 
   // Listen for mouse clicks
