@@ -120,6 +120,7 @@ function init() {
 
   // Load 3D model (GLTF)
   loadModel('winnowing_basket_sim.gltf', new THREE.Vector3(0, 0, 0));
+  modelGridArray('walls.gltf', new THREE.Vector3(-12, 1, -12), new THREE.Vector3(3, 3, 3), new THREE.Vector3(9, 1, 9));
   
   // DOF
   /*
@@ -249,12 +250,51 @@ function onMouseClick(event) {
 function loadModel(path, position = new THREE.Vector3(), onLoad = () => {}) {
   loader.load(path, (gltf) => {
     const model = gltf.scene;
-    model.position.copy(position);
-    scene.add(model);
 
     // Cast and recieve shadows
     model.castShadow = true;
     model.receiveShadow = true;
+
+    model.position.copy(position);
+    scene.add(model);
+
+    if (gltf.animations.length > 0) {
+      const mixer = new THREE.AnimationMixer(model);
+      gltf.animations.forEach(clip => mixer.clipAction(clip).play());
+      mixers.push(mixer);
+    }
+
+    onLoad(model);
+  });
+}
+
+// Function to load models
+function modelGridArray(path, position = new THREE.Vector3(), offset = new THREE.Vector3(), copies = new THREE.Vector3(), onLoad = () => {}) {
+
+  loader.load(path, (gltf) => {
+    const model = gltf.scene;
+
+    // Cast and recieve shadows
+    model.castShadow = true;
+    model.receiveShadow = true;
+
+    var positions = [];
+
+    const numCopies = copies.x * copies.y * copies.z;
+    for (let i = 0; i < numCopies; i++) {
+      const x = (i % copies.x) * offset.x;
+      const y = Math.floor(i / copies.x) % copies.y * offset.y;
+      const z = Math.floor(i / (copies.x * copies.y)) * offset.z;
+
+      const newPos = position.clone().add(new THREE.Vector3(x, y, z));
+      positions.push(newPos);
+    }
+
+    positions.forEach(pos => {
+      const clone = model.clone(true); // true = deep clone
+      clone.position.copy(pos);
+      scene.add(clone);
+    });
 
     if (gltf.animations.length > 0) {
       const mixer = new THREE.AnimationMixer(model);
