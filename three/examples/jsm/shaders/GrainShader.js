@@ -4,6 +4,8 @@ const GrainShader = {
         'grainIntensity': { value: 0.05 }, // Grain intensity
         'grainSize': { value: 1.0 },      // Grain size (scaling the noise)
         'time': { value: 0.0 },           // Time to animate the grain (optional)
+        'width': { value: null },
+        'height': { value: null },
     },
 
     vertexShader: /* glsl */`
@@ -17,7 +19,10 @@ const GrainShader = {
 
     fragmentShader: /* glsl */`
         precision mediump float;
-        
+
+        uniform float width;
+        uniform float height;
+
         varying vec2 vUv;
         
         uniform sampler2D tDiffuse;  // The original scene texture
@@ -31,12 +36,15 @@ const GrainShader = {
         }
 
         void main() {
+            float xSize = width / grainSize;
+            float ySize = height / grainSize;
+
             // Fetch the original color from the texture
             vec3 color = texture2D(tDiffuse, vUv).rgb;
             float brightness = max(0.0, (1.0 - length(color) - 0.2));
 
             // Generate random noise based on the pixel's coordinates
-            vec2 grainPos = vUv * grainSize + time * 0.1; // Time is added for animation
+            vec2 grainPos = floor(vUv * vec2(xSize, ySize)) / vec2(width, height) + time * 0.1; // Time is added for animation
             float noiseR = rand(grainPos + vec2(0.0, 0.0)); // Random value between 0.0 and 1.0
             float noiseG = rand(grainPos + vec2(0.1, 0.1)); // Random value between 0.0 and 1.0
             float noiseB = rand(grainPos + vec2(0.2, 0.2)); // Random value between 0.0 and 1.0

@@ -27,10 +27,27 @@ import { GrainShader } from './three/examples/jsm/shaders/GrainShader.js';
 // Vignette
 import { VignetteShader } from './three/examples/jsm/shaders/VignetteShader.js';
 
-// Vignette
+// ACES Transform
 import { ACESShader } from './shaders/ACESShader.js';
 
-let scene, camera, renderer, controls, composer, bokehPass, bloomPass, chromaticAberrationPass, grainPass;
+// Toon post processing
+import { toonShader } from './shaders/toonShader.js';
+
+// Edge detect shader
+import { gaussianBlurShader } from './shaders/gaussianBlurShader.js';
+import { edgeDetectShader } from './shaders/edgeDetectShader.js';
+
+let scene, camera, renderer, controls, composer, bloomPass, chromaticAberrationPass, grainPass;
+
+// Variables for lerping the camera position
+let lerpDuration = 0.2; // Duration of the lerp in seconds
+let lerpStartTime = null;
+let isLerping = false;
+
+let lerpStartPosition = new THREE.Vector3();
+let lerpEndPosition = new THREE.Vector3();
+let lerpStartTarget = new THREE.Vector3();
+let lerpEndTarget = new THREE.Vector3();
 
 // ACES Material
 const acesMaterial = new THREE.ShaderMaterial({
@@ -70,26 +87,15 @@ function init() {
   // Shadows
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
+  
   // Light
   const light = new THREE.DirectionalLight(0xffffff, 5.0);
-  light.castShadow = true;
 
   light.position.set(0, 10, 0);
   light.target.position.set(-5, 0, 0);
 
-  // Optional: tweak shadow quality
-  light.shadow.mapSize.width = 1024;
-  light.shadow.mapSize.height = 1024;
-  light.shadow.camera.near = 0.5;
-  light.shadow.camera.far = 50;
-  light.shadow.camera.left = -10;
-  light.shadow.camera.right = 10;
-  light.shadow.camera.top = 10;
-  light.shadow.camera.bottom = -10;
-
   scene.add(light);
-  scene.add(light.target);
+  scene.add(light.target); 
 
   document.body.appendChild(renderer.domElement);
 
@@ -106,38 +112,36 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
+  /*
   // Load HDRI as environment map
   const pmremGenerator = new PMREMGenerator(renderer);
   new RGBELoader()
     .setDataType(THREE.FloatType)
-    .setPath('hdri/')
-    .load('forest_2.0.hdr', (hdrTexture) => {
+    .load('hdri/georgentor_2k.hdr', (hdrTexture) => {
       const envMap = pmremGenerator.fromEquirectangular(hdrTexture).texture;
       scene.environment = envMap;
       hdrTexture.dispose();
       pmremGenerator.dispose();
     });
-
+  */
+    
   // Load 3D model (GLTF)
   loadModel('winnowing_basket_sim.gltf', new THREE.Vector3(0, 0, 0));
-  modelGridArray('walls.gltf', new THREE.Vector3(-12, 1, -12), new THREE.Vector3(3, 3, 3), new THREE.Vector3(9, 1, 9));
-  
-  // DOF
-  /*
-  bokehPass = new BokehPass(scene, camera, {
-    focus: 1.0,
-    aperture: 0.01,
-    maxblur: 0.01,
-    width: window.innerWidth,
-    height: window.innerHeight
-  });
-  composer.addPass(bokehPass);
-  */
+  loadModel('winnowing_basket_sim.gltf', new THREE.Vector3(3, 0, 0));
+  loadModel('winnowing_basket_sim.gltf', new THREE.Vector3(0, 0, 3));
+  loadModel('winnowing_basket_sim.gltf', new THREE.Vector3(3, 0, 3));
+  modelGridArray('walls.gltf', new THREE.Vector3(-12, 1, -12), new THREE.Vector3(3, 0, 3), new THREE.Vector3(9, 1, 9), new THREE.Vector3(0.2, 0.1, 0.2));
+  modelGridArray('floor.gltf', new THREE.Vector3(-9, 1.05, -9), new THREE.Vector3(9, 0, 9), new THREE.Vector3(3, 1, 3));
+
+  // FXAA
+  const fxaaPass = new ShaderPass(FXAAShader);
+  fxaaPass.material.uniforms['resolution'].value.set(1 / window.innerWidth, 1 / window.innerHeight); 
+  composer.addPass(fxaaPass);
 
   // Bloom effect (UnrealBloomPass)
-  const bloomStrength = 1.5; 
-  const bloomRadius = 1;  
-  const bloomThreshold = 10.0; 
+  const bloomStrength = 0.2; 
+  const bloomRadius = 0.01;  
+  const bloomThreshold = 2.0; 
   bloomPass = new UnrealBloomPass(
     new THREE.Vector2(window.innerWidth, window.innerHeight),
     bloomStrength,
@@ -145,23 +149,11 @@ function init() {
     bloomThreshold
   );
   composer.addPass(bloomPass);
-
-  /*
-  // FXAA
-  const fxaaPass = new ShaderPass(FXAAShader);
-  fxaaPass.material.uniforms['resolution'].value.set(1 / window.innerWidth, 1 / window.innerHeight); 
-  composer.addPass(fxaaPass);
-  */
-
+  
   // Chromatic Aberration
   chromaticAberrationPass = new ShaderPass(ChromaticAberrationShader);
+  chromaticAberrationPass.material.uniforms['aberrationIntensity'].value = 0.02; // Controls the maximum intensity of the effect
   composer.addPass(chromaticAberrationPass);
-
-  // Create Grain pass and set uniforms
-  grainPass = new ShaderPass(GrainShader);
-  grainPass.material.uniforms['grainIntensity'].value = 0.02;
-  grainPass.material.uniforms['grainSize'].value = 5.0;
-  composer.addPass(grainPass);
   
   // Vignette effect setup
   const vignettePass = new ShaderPass(VignetteShader);
@@ -169,14 +161,34 @@ function init() {
   vignettePass.material.uniforms['darkness'].value = 1.0;
   composer.addPass(vignettePass);
 
+  // Create Grain pass and set uniforms
+  grainPass = new ShaderPass(GrainShader);
+  grainPass.material.uniforms['grainIntensity'].value = 0.1;
+  grainPass.material.uniforms['grainSize'].value = 2.0;
+  grainPass.material.uniforms['height'].value = window.innerHeight;
+  grainPass.material.uniforms['width'].value = window.innerWidth;
+  composer.addPass(grainPass);
+  
   // ACES Tonemapping
   const ACESPass = new ShaderPass(ACESShader);
-  ACESPass.material.uniforms['ACESBL_Gamma'].value = 2.2;
-  ACESPass.material.uniforms['toneMappingExposure'].value = 0.5;
+  ACESPass.material.uniforms['Gamma'].value = 2.2;
+  ACESPass.material.uniforms['toneMappingExposure'].value = 1.0;
   composer.addPass(ACESPass);
+  
+  /*
+  // Toon Post Processing
+  const toonPass = new ShaderPass(toonShader);
+  composer.addPass(toonPass);
+  
+  // Edge Detect
+  const edgePass = new ShaderPass(edgeDetectShader);
+  edgePass.material.uniforms['width'].value = window.innerWidth;
+  edgePass.material.uniforms['height'].value = window.innerHeight;
+  composer.addPass(edgePass);
+  */
 
   // Listen for mouse clicks
-  document.addEventListener('click', onMouseClick, false);
+  document.addEventListener('click', setCameraPosition, false);
   
   // Resize event listener
   window.addEventListener('resize', onWindowResize);
@@ -187,11 +199,17 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
   composer.setSize(window.innerWidth, window.innerHeight);
+  // Update grain resolution
+  grainPass.material.uniforms['height'].value = window.innerHeight;
+  grainPass.material.uniforms['width'].value = window.innerWidth;
 }
 
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
+  
+  var camZPos = Math.min(1, Math.max(-1, camera.position.y));
+  camera.position.set(camera.position.x, camZPos, camera.position.z);
 
   // Update all mixers
   const delta = clock.getDelta(); // use deltaTime for smoother animation
@@ -200,10 +218,24 @@ function animate() {
   // Update Grain Pass
   grainPass.material.uniforms['time'].value += 0.05; 
   composer.render();
+
+  // Update camera position
+  // Lerp camera position and target
+  if (isLerping) {
+    let elapsedTime = clock.getElapsedTime() - lerpStartTime;
+    let t = Math.min(elapsedTime / lerpDuration, 1); // Clamp t between 0 and 1
+
+    camera.position.lerpVectors(lerpStartPosition, lerpEndPosition, t);
+    controls.target.lerpVectors(lerpStartTarget, lerpEndTarget, t);
+
+    if (t === 1) {
+      isLerping = false; // Stop lerping when done
+    }
+  }
 }
 
 // Focus on click
-function onMouseClick(event) {
+function setCameraPosition(event) {
   // Normalize mouse coordinates to be between -1 and 1
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
@@ -224,26 +256,31 @@ function onMouseClick(event) {
   // Find the intersected objects
   let intersects = raycaster.intersectObjects(scene.children, true); // true to include descendants
 
-  if (intersects.length > 0) {
-    // Get the position of the first intersected object
-    let intersectedObject = intersects[0].object;
-    let targetPosition = intersectedObject.getWorldPosition(new THREE.Vector3());
+  if (intersects.length === 0) return;
 
-    // Calculate the distance between the camera and the clicked point
-    let distance = camera.position.distanceTo(targetPosition);
-
-    // Log the new focus value
-    console.log("New Focus Distance: ", distance);
-
-    // Update the focus of the BokehPass
-    bokehPass.focus = distance;
-
-    // Force the BokehPass to update
-    bokehPass.uniforms["focus"].value = distance; // Ensure the uniform is updated directly
-
-    // Trigger a composer render to refresh the post-processing with updated parameters
-    composer.render();
+  let firstObjecName = intersects[0].object.name.split("_")[0];
+  if (firstObjecName === "Walls" || firstObjecName === "FloorLP") {
+    return;
   }
+
+  console.log(firstObjecName);
+
+  // Get the position of the intersected object
+  let intersectedObject = intersects[0].object;
+  let newTargetPosition = intersectedObject.getWorldPosition(new THREE.Vector3());
+
+  if (newTargetPosition.equals(controls.target)) {
+    return; // If the target is the same, do nothing
+  }
+  // Start lerping
+  lerpStartTime = clock.getElapsedTime();
+  isLerping = true;
+
+  lerpStartPosition.copy(camera.position);
+  lerpEndPosition.subVectors(newTargetPosition, controls.target).add(camera.position);
+
+  lerpStartTarget.copy(controls.target);
+  lerpEndTarget.copy(newTargetPosition);
 }
 
 // Function to load models
@@ -269,7 +306,7 @@ function loadModel(path, position = new THREE.Vector3(), onLoad = () => {}) {
 }
 
 // Function to load models
-function modelGridArray(path, position = new THREE.Vector3(), offset = new THREE.Vector3(), copies = new THREE.Vector3(), onLoad = () => {}) {
+function modelGridArray(path, position = new THREE.Vector3(), offset = new THREE.Vector3(), copies = new THREE.Vector3(), jitter = new THREE.Vector3(0, 0, 0), onLoad = () => {}) {
 
   loader.load(path, (gltf) => {
     const model = gltf.scene;
@@ -282,9 +319,9 @@ function modelGridArray(path, position = new THREE.Vector3(), offset = new THREE
 
     const numCopies = copies.x * copies.y * copies.z;
     for (let i = 0; i < numCopies; i++) {
-      const x = (i % copies.x) * offset.x;
-      const y = Math.floor(i / copies.x) % copies.y * offset.y;
-      const z = Math.floor(i / (copies.x * copies.y)) * offset.z;
+      const x = (i % copies.x) * offset.x + (Math.random(i) * jitter.x - jitter.x / 2);
+      const y = Math.floor(i / copies.x) % copies.y * offset.y + (Math.random(i) * jitter.y - jitter.z / 2);;
+      const z = Math.floor(i / (copies.x * copies.y)) * offset.z + (Math.random(i) * jitter.y - jitter.z / 2);;
 
       const newPos = position.clone().add(new THREE.Vector3(x, y, z));
       positions.push(newPos);

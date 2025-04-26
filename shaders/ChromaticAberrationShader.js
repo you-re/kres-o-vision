@@ -36,7 +36,6 @@ const ChromaticAberrationShader = {
             vec2 greenOffset;
             vec2 blueOffset;
 
-            vec4 texel;
             vec4 red = vec4(0.0);
             vec4 green = vec4(0.0);
             vec4 blue = vec4(0.0);
@@ -44,7 +43,7 @@ const ChromaticAberrationShader = {
             for (int i = 1; i <= samples; ++i) {
                 float scale = float(i);
 
-                red += texture2D(tDiffuse, vUv + direction * aberrationStrength * 0.33/float(samples) * scale);
+                red += texture2D(tDiffuse, vUv + direction * aberrationStrength * -0.33/float(samples) * scale);
                 green += texture2D(tDiffuse, vUv + direction * aberrationStrength * -0.66/float(samples) * scale);
                 blue += texture2D(tDiffuse, vUv + direction * aberrationStrength * -1.0/float(samples) * scale);
             }
@@ -52,13 +51,10 @@ const ChromaticAberrationShader = {
             red /= float(samples);
             green /= float(samples);
             blue /= float(samples);
-
-                            
-            
-
+                    
             // Combine the color channels
-            gl_FragColor = vec4(red.r, green.g, blue.b, texel.a);
-            // gl_FragColor = vec4(direction, 0, 1);
+            gl_FragColor = vec4(red.r, green.g, blue.b, 1.0);
+
         }
     `
 };

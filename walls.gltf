@@ -3,6 +3,10 @@
 		"generator":"Khronos glTF Blender I/O v4.4.55",
 		"version":"2.0"
 	},
+	"extensionsUsed":[
+		"KHR_materials_emissive_strength",
+		"KHR_materials_specular"
+	],
 	"scene":0,
 	"scenes":[
 		{
@@ -21,18 +25,34 @@
 	"materials":[
 		{
 			"doubleSided":true,
+			"emissiveFactor":[
+				1,
+				1,
+				1
+			],
+			"emissiveTexture":{
+				"index":0
+			},
+			"extensions":{
+				"KHR_materials_emissive_strength":{
+					"emissiveStrength":3
+				},
+				"KHR_materials_specular":{
+					"specularTexture":{
+						"index":1
+					}
+				}
+			},
 			"name":"Walls",
 			"normalTexture":{
-				"index":0
+				"index":2
 			},
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
-					"index":1
+					"index":3
 				},
 				"metallicFactor":0,
-				"metallicRoughnessTexture":{
-					"index":2
-				}
+				"roughnessFactor":0.5
 			}
 		}
 	],
@@ -64,23 +84,32 @@
 		{
 			"sampler":0,
 			"source":2
+		},
+		{
+			"sampler":0,
+			"source":3
 		}
 	],
 	"images":[
 		{
 			"mimeType":"image/jpeg",
+			"name":"Walls Diffuse Bake",
+			"uri":"tex/floor/Walls%20Diffuse%20Bake.jpg"
+		},
+		{
+			"mimeType":"image/jpeg",
+			"name":"Walls Specular",
+			"uri":"tex/floor/Walls%20Specular.jpg"
+		},
+		{
+			"mimeType":"image/jpeg",
 			"name":"Walls Normal",
-			"uri":"tex/walls/Walls%20Normal.jpg"
+			"uri":"tex/floor/Walls%20Normal.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
 			"name":"Walls Diffuse",
-			"uri":"tex/walls/Walls%20Diffuse.jpg"
-		},
-		{
-			"mimeType":"image/jpeg",
-			"name":"Walls Roughness",
-			"uri":"tex/walls/Walls%20Roughness.jpg"
+			"uri":"tex/floor/Walls%20Diffuse.jpg"
 		}
 	],
 	"accessors":[
