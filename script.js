@@ -137,6 +137,12 @@ function init() {
   const fxaaPass = new ShaderPass(FXAAShader);
   fxaaPass.material.uniforms['resolution'].value.set(1 / window.innerWidth, 1 / window.innerHeight); 
   composer.addPass(fxaaPass);
+  
+  // Vignette effect setup
+  const vignettePass = new ShaderPass(VignetteShader);
+  vignettePass.material.uniforms['offset'].value = 1.4;  
+  vignettePass.material.uniforms['darkness'].value = 1.0;
+  composer.addPass(vignettePass);
 
   // Bloom effect (UnrealBloomPass)
   const bloomStrength = 0.2; 
@@ -155,15 +161,9 @@ function init() {
   chromaticAberrationPass.material.uniforms['aberrationIntensity'].value = 0.02; // Controls the maximum intensity of the effect
   composer.addPass(chromaticAberrationPass);
   
-  // Vignette effect setup
-  const vignettePass = new ShaderPass(VignetteShader);
-  vignettePass.material.uniforms['offset'].value = 1.2;  
-  vignettePass.material.uniforms['darkness'].value = 1.0;
-  composer.addPass(vignettePass);
-
   // Create Grain pass and set uniforms
   grainPass = new ShaderPass(GrainShader);
-  grainPass.material.uniforms['grainIntensity'].value = 0.1;
+  grainPass.material.uniforms['grainIntensity'].value = 0.02;
   grainPass.material.uniforms['grainSize'].value = 2.0;
   grainPass.material.uniforms['height'].value = window.innerHeight;
   grainPass.material.uniforms['width'].value = window.innerWidth;
@@ -174,7 +174,7 @@ function init() {
   ACESPass.material.uniforms['Gamma'].value = 2.2;
   ACESPass.material.uniforms['toneMappingExposure'].value = 1.0;
   composer.addPass(ACESPass);
-  
+    
   /*
   // Toon Post Processing
   const toonPass = new ShaderPass(toonShader);

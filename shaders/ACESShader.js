@@ -57,7 +57,7 @@ export const ACESShader = {
         vec3 texColor = texture2D(tDiffuse, vUv).rgb;
   
         // Exposure adjustment
-        texColor *= toneMappingExposure * 0.6;
+        texColor *= toneMappingExposure;
   
         // Apply ACES color space transformations
         texColor = ACESInputMat * texColor;

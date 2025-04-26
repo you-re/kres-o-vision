@@ -2,7 +2,7 @@ export const gaussianBlurShader = {
     uniforms: {
         'tDiffuse': { value: null },
         'width': { value: null },
-        'height': { value: null },
+        'height': { value: null }
     },
 
     vertexShader: /* glsl */`
