@@ -194,7 +194,7 @@ function init() {
   // Resize event listener
   window.addEventListener('resize', onWindowResize);
 
-  renderer.render(scene, camera);
+  composer.render();
 }
 
 function onWindowResize() {
@@ -220,8 +220,8 @@ function animate() {
 
   // Update Grain Pass
   grainPass.material.uniforms['time'].value += 0.05; 
-  // composer.render();
-  renderer.render(scene, camera);
+  composer.render();
+  // renderer.render(scene, camera);
 
   // Update camera position
   // Lerp camera position and target
