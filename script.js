@@ -119,7 +119,7 @@ function init() {
   loadModel('winnowing_basket_sim.gltf', new THREE.Vector3(3, 0, 3));
   modelGridArray('walls.gltf', new THREE.Vector3(-12, 1, -12), new THREE.Vector3(3, 0, 3), new THREE.Vector3(9, 1, 9), new THREE.Vector3(0.2, 0.1, 0.2));
   modelGridArray('floor.gltf', new THREE.Vector3(-9, 1.05, -9), new THREE.Vector3(9, 0, 9), new THREE.Vector3(3, 1, 3));
-
+  /*
   // FXAA
   const fxaaPass = new ShaderPass(FXAAShader);
   fxaaPass.material.uniforms['resolution'].value.set(1 / window.innerWidth, 1 / window.innerHeight); 
@@ -155,7 +155,7 @@ function init() {
   grainPass.material.uniforms['height'].value = window.innerHeight;
   grainPass.material.uniforms['width'].value = window.innerWidth;
   composer.addPass(grainPass);
-  
+  */
   // ACES Tonemapping
   const ACESPass = new ShaderPass(ACESShader);
   ACESPass.material.uniforms['Gamma'].value = 2.2;
@@ -205,7 +205,7 @@ function animate() {
   mixers.forEach(m => m.update(delta));
 
   // Update Grain Pass
-  grainPass.material.uniforms['time'].value += 0.05; 
+  // grainPass.material.uniforms['time'].value += 0.05; 
   composer.render();
   // renderer.render(scene, camera);
 
