@@ -1,3 +1,4 @@
+"use strict";
 import * as THREE from './three/build/three.module.js';
 import { OrbitControls } from './three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from './three/examples/jsm/loaders/GLTFLoader.js';
@@ -174,7 +175,7 @@ function init() {
   ACESPass.material.uniforms['Gamma'].value = 2.2;
   ACESPass.material.uniforms['toneMappingExposure'].value = 1.0;
   composer.addPass(ACESPass);
-    
+  
   /*
   // Toon Post Processing
   const toonPass = new ShaderPass(toonShader);
@@ -192,6 +193,8 @@ function init() {
   
   // Resize event listener
   window.addEventListener('resize', onWindowResize);
+
+  renderer.render(scene, camera);
 }
 
 function onWindowResize() {
@@ -217,7 +220,8 @@ function animate() {
 
   // Update Grain Pass
   grainPass.material.uniforms['time'].value += 0.05; 
-  composer.render();
+  // composer.render();
+  renderer.render(scene, camera);
 
   // Update camera position
   // Lerp camera position and target
