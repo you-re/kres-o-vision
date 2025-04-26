@@ -1,3 +1,4 @@
+"use strict";
 import {
 	Color
 } from '../../../build/three.module.js';

@@ -1,3 +1,4 @@
+"use strict";
 import { Pass } from './Pass.js';
 
 /**

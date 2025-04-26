@@ -1,3 +1,4 @@
+"use strict";
 export const gaussianBlurShader = {
     uniforms: {
         'tDiffuse': { value: null },

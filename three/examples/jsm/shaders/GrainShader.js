@@ -1,3 +1,4 @@
+"use strict";
 const GrainShader = {
     uniforms: {
         'tDiffuse': { value: null },      // The rendered scene

@@ -5,15 +5,8 @@ import { GLTFLoader } from './three/examples/jsm/loaders/GLTFLoader.js';
 import { EffectComposer } from './three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from './three/examples/jsm/postprocessing/RenderPass.js';
 
-// DOF
-import { BokehPass } from './three/examples/jsm/postprocessing/BokehPass.js';
-
 // Bloom + Tonemapping
 import { UnrealBloomPass } from './three/examples/jsm/postprocessing/UnrealBloomPass.js';
-
-// HDRI and other necessary imports
-import { RGBELoader } from './three/examples/jsm/loaders/RGBELoader.js';
-import { PMREMGenerator } from './three/build/three.module.js';
 
 // FXAA
 import { ShaderPass } from './three/examples/jsm/postprocessing/ShaderPass.js';
@@ -30,13 +23,6 @@ import { VignetteShader } from './three/examples/jsm/shaders/VignetteShader.js';
 
 // ACES Transform
 import { ACESShader } from './shaders/ACESShader.js';
-
-// Toon post processing
-import { toonShader } from './shaders/toonShader.js';
-
-// Edge detect shader
-import { gaussianBlurShader } from './shaders/gaussianBlurShader.js';
-import { edgeDetectShader } from './shaders/edgeDetectShader.js';
 
 let scene, camera, renderer, controls, composer, bloomPass, chromaticAberrationPass, grainPass;
 

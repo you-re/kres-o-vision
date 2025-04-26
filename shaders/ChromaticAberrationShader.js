@@ -1,3 +1,4 @@
+"use strict";
 const ChromaticAberrationShader = {
     uniforms: {
         'tDiffuse': { value: null },
