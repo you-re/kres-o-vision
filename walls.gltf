@@ -4,7 +4,6 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_materials_emissive_strength",
 		"KHR_materials_specular"
 	],
 	"scene":0,
@@ -19,7 +18,7 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"Walls LP.001"
+			"name":"WallsLP"
 		}
 	],
 	"materials":[
@@ -34,9 +33,6 @@
 				"index":0
 			},
 			"extensions":{
-				"KHR_materials_emissive_strength":{
-					"emissiveStrength":3
-				},
 				"KHR_materials_specular":{
 					"specularTexture":{
 						"index":1
@@ -52,7 +48,9 @@
 					"index":3
 				},
 				"metallicFactor":0,
-				"roughnessFactor":0.5
+				"metallicRoughnessTexture":{
+					"index":4
+				}
 			}
 		}
 	],
@@ -88,28 +86,37 @@
 		{
 			"sampler":0,
 			"source":3
+		},
+		{
+			"sampler":0,
+			"source":4
 		}
 	],
 	"images":[
 		{
-			"mimeType":"image/jpeg",
-			"name":"Walls Diffuse Bake",
-			"uri":"tex/floor/Walls%20Diffuse%20Bake.jpg"
+			"mimeType":"image/png",
+			"name":"walls_diffuse_bake",
+			"uri":"tex/walls/walls_diffuse_bake.png"
 		},
 		{
 			"mimeType":"image/jpeg",
-			"name":"Walls Specular",
-			"uri":"tex/floor/Walls%20Specular.jpg"
+			"name":"walls_specularity",
+			"uri":"tex/walls/walls_specularity.jpg"
 		},
 		{
-			"mimeType":"image/jpeg",
-			"name":"Walls Normal",
-			"uri":"tex/floor/Walls%20Normal.jpg"
+			"mimeType":"image/png",
+			"name":"walls_normal",
+			"uri":"tex/walls/walls_normal.png"
 		},
 		{
-			"mimeType":"image/jpeg",
-			"name":"Walls Diffuse",
-			"uri":"tex/floor/Walls%20Diffuse.jpg"
+			"mimeType":"image/png",
+			"name":"walls_diffuse",
+			"uri":"tex/walls/walls_diffuse.png"
+		},
+		{
+			"mimeType":"image/png",
+			"name":"walls_roughness",
+			"uri":"tex/walls/walls_roughness.png"
 		}
 	],
 	"accessors":[
@@ -119,12 +126,12 @@
 			"count":17408,
 			"max":[
 				1.5303891897201538,
-				1.628083348274231,
+				2.1280832290649414,
 				1.7376513481140137
 			],
 			"min":[
 				-1.7446730136871338,
-				-2.0168275833129883,
+				-1.5168275833129883,
 				-1.531720519065857
 			],
 			"type":"VEC3"
