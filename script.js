@@ -41,7 +41,7 @@ let lerpStartTarget = new THREE.Vector3();
 let lerpEndTarget = new THREE.Vector3();
 
 // Active object for animation 
-let active_object = null;
+let active_object = "Winnowing_Basket_LP";
 
 // ACES Material
 const acesMaterial = new THREE.ShaderMaterial({
@@ -123,6 +123,7 @@ function init() {
   loadModel('winnowing_basket_sim.gltf', "Winnowing_Basket_LP", new THREE.Vector3(0, 0, 0));
   loadModel('ox_thing.gltf', "Ox_Thing", new THREE.Vector3(3, 0, 0));
   modelGridArray('walls.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0.2, 0.2, 0.2));
+  modelGridArray('candle.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0.02, 0.2, 0.02 ));
   modelGridArray('ground.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27));
 
   // FXAA
@@ -150,7 +151,7 @@ function init() {
   
   // Chromatic Aberration
   chromaticAberrationPass = new ShaderPass(ChromaticAberrationShader);
-  chromaticAberrationPass.material.uniforms['aberrationIntensity'].value = 0.02; // Controls the maximum intensity of the effect
+  chromaticAberrationPass.material.uniforms['aberrationIntensity'].value = 0.04; // Controls the maximum intensity of the effect
   composer.addPass(chromaticAberrationPass);
   
   // Create Grain pass and set uniforms
@@ -293,7 +294,7 @@ function setCameraPosition(event) {
   if (intersects.length === 0) return;
 
   let firstObjecName = intersects[0].object.name.split("_")[0];
-  if (firstObjecName === "WallsLP" || firstObjecName === "GroundLP") {
+  if (firstObjecName !== "Winnowing_Basket_LP" || firstObjecName !== "Ox_Thing") {
     return;
   }
 
