@@ -49,9 +49,7 @@
 					"index":3
 				},
 				"metallicFactor":0,
-				"metallicRoughnessTexture":{
-					"index":4
-				}
+				"roughnessFactor":0.5
 			}
 		}
 	],
@@ -87,10 +85,6 @@
 		{
 			"sampler":0,
 			"source":3
-		},
-		{
-			"sampler":0,
-			"source":4
 		}
 	],
 	"images":[
@@ -113,11 +107,6 @@
 			"mimeType":"image/jpeg",
 			"name":"ground_diffuse",
 			"uri":"tex/ground/ground_diffuse.jpg"
-		},
-		{
-			"mimeType":"image/png",
-			"name":"ground_roughness",
-			"uri":"tex/ground/ground_roughness.png"
 		}
 	],
 	"accessors":[

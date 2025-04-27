@@ -123,8 +123,7 @@ function init() {
   loadModel('winnowing_basket_sim.gltf', "Winnowing_Basket_LP", new THREE.Vector3(0, 0, 0));
   loadModel('ox_thing.gltf', "Ox_Thing", new THREE.Vector3(3, 0, 0));
   modelGridArray('walls.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0.2, 0.2, 0.2));
-  modelGridArray('candle.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27));
-  modelGridArray('ground.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(9, 0, 9), new THREE.Vector3(9, 1, 9), true, false);
+  modelGridArray('ground.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27));
 
   // FXAA
   const fxaaPass = new ShaderPass(FXAAShader);
