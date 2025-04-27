@@ -94,9 +94,9 @@
 	],
 	"images":[
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/jpeg",
 			"name":"walls_diffuse_bake",
-			"uri":"tex/walls/walls_diffuse_bake.png"
+			"uri":"tex/walls/walls_diffuse_bake.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
@@ -104,14 +104,14 @@
 			"uri":"tex/walls/walls_specularity.jpg"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/jpeg",
 			"name":"walls_normal",
-			"uri":"tex/walls/walls_normal.png"
+			"uri":"tex/walls/walls_normal.jpg"
 		},
 		{
-			"mimeType":"image/png",
+			"mimeType":"image/jpeg",
 			"name":"walls_diffuse",
-			"uri":"tex/walls/walls_diffuse.png"
+			"uri":"tex/walls/walls_diffuse.jpg"
 		},
 		{
 			"mimeType":"image/png",
