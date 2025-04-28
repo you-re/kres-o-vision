@@ -294,7 +294,7 @@ function setCameraPosition(event) {
   if (intersects.length === 0) return;
 
   let firstObjectName = intersects[0].object.name.split("_")[0];
-  if (firstObjectName === "Ground" || firstObjectName === "WallsLP" || firstObjectName === "Candle") {
+  if (firstObjectName === "GroundLP" || firstObjectName === "WallsLP" || firstObjectName === "Candle") {
     return;
   }
 
