@@ -293,8 +293,8 @@ function setCameraPosition(event) {
 
   if (intersects.length === 0) return;
 
-  let firstObjecName = intersects[0].object.name.split("_")[0];
-  if (firstObjecName !== "Winnowing_Basket_LP" || firstObjecName !== "Ox_Thing") {
+  let firstObjectName = intersects[0].object.name.split("_")[0];
+  if (firstObjectName === "Ground" || firstObjectName === "WallsLP" || firstObjectName === "Candle") {
     return;
   }
 
