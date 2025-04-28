@@ -60,13 +60,20 @@ const loader = new GLTFLoader();
 let raycaster = new THREE.Raycaster();
 let mouse = new THREE.Vector2();
 
+let fogColor = new THREE.Color(0x0f0b0b);
+
 init();
 animate();
 
 function init() {
   // Scene setup
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x555555);
+  {
+    const near = 10;
+    const far = 30;
+    scene.fog = new THREE.Fog(fogColor, near, far);
+  }
+  scene.background = fogColor;
 
   // Camera setup
   camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
@@ -114,7 +121,7 @@ function init() {
     .load('hdri/dungeon_2k.hdr', (hdrTexture) => {
       const envMap = pmremGenerator.fromEquirectangular(hdrTexture).texture;
       scene.environment = envMap;
-      scene.background = envMap;
+      scene.background = fogColor;
       hdrTexture.dispose();
       pmremGenerator.dispose();
     });  
@@ -124,7 +131,7 @@ function init() {
   loadModel('ox_thing.gltf', "Ox_Thing", new THREE.Vector3(3, 0, 0));
   loadModel('brana.gltf', "Brana", new THREE.Vector3(0, 0, 3));
   modelGridArray('walls.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0.2, 0.2, 0.2));
-  modelGridArray('candle.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0.02, 0.2, 0.02 ));
+  modelGridArray('candle.gltf', new THREE.Vector3(0, -0.1, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0.1, 0 ));
   modelGridArray('ground.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27));
 
   // FXAA
@@ -295,7 +302,7 @@ function setCameraPosition(event) {
   if (intersects.length === 0) return;
 
   let firstObjectName = intersects[0].object.name.split("_")[0];
-  if (firstObjectName === "GroundLP" || firstObjectName === "WallsLP" || firstObjectName === "Candle") {
+  if (firstObjectName != "Winnowing" && firstObjectName!= "Ox" && firstObjectName != "BranaLP") {
     return;
   }
 
