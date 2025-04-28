@@ -217,6 +217,9 @@ function animate() {
   // Update all mixers
   const delta = clock.getDelta(); // use deltaTime for smoother animation
   mixers.forEach(m => {
+    if (m.getRoot().name.startsWith("Scene")) {
+      m.update(delta / 2.0);
+    }
     if (m.getRoot().name === active_object) {
       m.update(delta);
     }
@@ -301,12 +304,18 @@ function setCameraPosition(event) {
 
   if (intersects.length === 0) return;
 
-  let firstObjectName = intersects[0].object.name.split("_")[0];
-  if (firstObjectName != "Winnowing" && firstObjectName!= "Ox" && firstObjectName != "BranaLP") {
+  let firstObjectName = intersects[0].object.name;
+  if (firstObjectName != "Winnowing_Basket_LP" && firstObjectName!= "Ox_Thing" && firstObjectName != "BranaLP") {
     return;
   }
 
   active_object = intersects[0].object.name;
+
+  // Update the "object-name-display" element in the HTML
+  const objectNameDisplay = document.getElementById("object-name-display");
+  if (objectNameDisplay) {
+    objectNameDisplay.textContent = active_object;
+  }
 
   console.log(active_object);
   // Get the position of the intersected object
@@ -382,7 +391,6 @@ function modelGridArray(path, position = new THREE.Vector3(0, 0, 0), offset = ne
       const newPos = position.clone().add(new THREE.Vector3(x, y, z));
       positions.push(newPos);
     }
-
     
     positions.forEach(pos => {
       const clone = model.clone(true); // true = deep clone
@@ -395,14 +403,14 @@ function modelGridArray(path, position = new THREE.Vector3(0, 0, 0), offset = ne
 
       clone.position.copy(pos);
 
+      // Add animation to clones
+      const animationMixer = new THREE.AnimationMixer(clone);
+      if (gltf.animations.length > 0) {
+        gltf.animations.forEach(clip => animationMixer.clipAction(clip).play());
+      }
+      mixers.push(animationMixer);
       scene.add(clone);
     });
-
-    if (gltf.animations.length > 0) {
-      const mixer = new THREE.AnimationMixer(model);
-      gltf.animations.forEach(clip => mixer.clipAction(clip).play());
-      mixers.push(mixer);
-    }
 
     onLoad(model);
   });

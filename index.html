@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>3D Viewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tagesschrift&display=swap" rel="stylesheet">
   <style>
     body { margin: 0; overflow: hidden; }
     #ui {
@@ -16,12 +19,21 @@
       padding: 8px 12px;
       font-size: 14px;
     }
+    body {
+      font-family: 'Tagesschrift', serif;
+      color: #000a;
+      font-size: 36px;
+    }
   </style>
 </head>
 <body>
+  <div id="ui"></div>
+    <div id="active-object-name" style="position: absolute; top: 2.5%; left: 50%; transform: translateX(-50%); text-align: center; max-width: 90%; word-wrap: break-word;">
+      <span id="object-name-display" style="font-size: 1.2em;">Try clicking on objects</span>
+    </div>
+  </div>
   
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
   <script type="module" src="./script.js"></script>
-  
 </body>
 </html>

@@ -38,6 +38,17 @@
 		{
 			"mesh":1,
 			"name":"Flame.001",
+			"rotation":[
+				0,
+				-1,
+				0,
+				3.2320363629878557e-07
+			],
+			"scale":[
+				0.9681957960128784,
+				0.9681957364082336,
+				0.9681957960128784
+			],
 			"translation":[
 				0,
 				0.11249449849128723,
@@ -79,8 +90,19 @@
 			]
 		},
 		{
-			"mesh":1,
+			"mesh":3,
 			"name":"Flame.002",
+			"rotation":[
+				0,
+				0.7071070671081543,
+				0,
+				0.7071065902709961
+			],
+			"scale":[
+				1.016406536102295,
+				1.016406536102295,
+				1.016406536102295
+			],
 			"translation":[
 				0,
 				0.11249451339244843,
@@ -122,7 +144,7 @@
 			]
 		},
 		{
-			"mesh":1,
+			"mesh":4,
 			"name":"Flame.003",
 			"translation":[
 				0,
@@ -165,8 +187,19 @@
 			]
 		},
 		{
-			"mesh":1,
+			"mesh":5,
 			"name":"Flame.004",
+			"rotation":[
+				0,
+				-0.7071065902709961,
+				0,
+				0.7071070671081543
+			],
+			"scale":[
+				0.9846017360687256,
+				0.9846017360687256,
+				0.9846017360687256
+			],
 			"translation":[
 				0,
 				0.11249451339244843,
@@ -190,6 +223,84 @@
 				1.2264577150344849,
 				0.08199439197778702,
 				-1.221124291419983
+			]
+		}
+	],
+	"animations":[
+		{
+			"channels":[
+				{
+					"sampler":0,
+					"target":{
+						"node":1,
+						"path":"scale"
+					}
+				}
+			],
+			"name":"IcosphereAction.002",
+			"samplers":[
+				{
+					"input":23,
+					"interpolation":"LINEAR",
+					"output":24
+				}
+			]
+		},
+		{
+			"channels":[
+				{
+					"sampler":0,
+					"target":{
+						"node":4,
+						"path":"scale"
+					}
+				}
+			],
+			"name":"IcosphereAction.003",
+			"samplers":[
+				{
+					"input":23,
+					"interpolation":"LINEAR",
+					"output":25
+				}
+			]
+		},
+		{
+			"channels":[
+				{
+					"sampler":0,
+					"target":{
+						"node":7,
+						"path":"scale"
+					}
+				}
+			],
+			"name":"IcosphereAction",
+			"samplers":[
+				{
+					"input":23,
+					"interpolation":"LINEAR",
+					"output":26
+				}
+			]
+		},
+		{
+			"channels":[
+				{
+					"sampler":0,
+					"target":{
+						"node":10,
+						"path":"scale"
+					}
+				}
+			],
+			"name":"IcosphereAction.001",
+			"samplers":[
+				{
+					"input":23,
+					"interpolation":"LINEAR",
+					"output":27
+				}
 			]
 		}
 	],
@@ -272,7 +383,7 @@
 			]
 		},
 		{
-			"name":"Icosphere",
+			"name":"Icosphere.002",
 			"primitives":[
 				{
 					"attributes":{
@@ -295,6 +406,48 @@
 						"TEXCOORD_0":12
 					},
 					"indices":13,
+					"material":1
+				}
+			]
+		},
+		{
+			"name":"Icosphere.003",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":14,
+						"NORMAL":15,
+						"TEXCOORD_0":16
+					},
+					"indices":9,
+					"material":1
+				}
+			]
+		},
+		{
+			"name":"Icosphere",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":17,
+						"NORMAL":18,
+						"TEXCOORD_0":19
+					},
+					"indices":9,
+					"material":1
+				}
+			]
+		},
+		{
+			"name":"Icosphere.001",
+			"primitives":[
+				{
+					"attributes":{
+						"POSITION":20,
+						"NORMAL":21,
+						"TEXCOORD_0":22
+					},
+					"indices":9,
 					"material":1
 				}
 			]
@@ -492,6 +645,126 @@
 			"componentType":5123,
 			"count":582,
 			"type":"SCALAR"
+		},
+		{
+			"bufferView":14,
+			"componentType":5126,
+			"count":63,
+			"max":[
+				0.005661367438733578,
+				0.03986740484833717,
+				0.005952704232186079
+			],
+			"min":[
+				-0.005661367438733578,
+				-0.00020385580137372017,
+				-0.005952704232186079
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":15,
+			"componentType":5126,
+			"count":63,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":16,
+			"componentType":5126,
+			"count":63,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":17,
+			"componentType":5126,
+			"count":63,
+			"max":[
+				0.005661367438733578,
+				0.03986740484833717,
+				0.005952704232186079
+			],
+			"min":[
+				-0.005661367438733578,
+				-0.00020385580137372017,
+				-0.005952704232186079
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":18,
+			"componentType":5126,
+			"count":63,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":19,
+			"componentType":5126,
+			"count":63,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":20,
+			"componentType":5126,
+			"count":63,
+			"max":[
+				0.005661367438733578,
+				0.03986740484833717,
+				0.005952704232186079
+			],
+			"min":[
+				-0.005661367438733578,
+				-0.00020385580137372017,
+				-0.005952704232186079
+			],
+			"type":"VEC3"
+		},
+		{
+			"bufferView":21,
+			"componentType":5126,
+			"count":63,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":22,
+			"componentType":5126,
+			"count":63,
+			"type":"VEC2"
+		},
+		{
+			"bufferView":23,
+			"componentType":5126,
+			"count":50,
+			"max":[
+				1.6666666666666667
+			],
+			"min":[
+				0.03333333333333333
+			],
+			"type":"SCALAR"
+		},
+		{
+			"bufferView":24,
+			"componentType":5126,
+			"count":50,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":25,
+			"componentType":5126,
+			"count":50,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":26,
+			"componentType":5126,
+			"count":50,
+			"type":"VEC3"
+		},
+		{
+			"bufferView":27,
+			"componentType":5126,
+			"count":50,
+			"type":"VEC3"
 		}
 	],
 	"bufferViews":[
@@ -578,6 +851,85 @@
 			"byteLength":1164,
 			"byteOffset":20080,
 			"target":34963
+		},
+		{
+			"buffer":0,
+			"byteLength":756,
+			"byteOffset":21244,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":756,
+			"byteOffset":22000,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":504,
+			"byteOffset":22756,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":756,
+			"byteOffset":23260,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":756,
+			"byteOffset":24016,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":504,
+			"byteOffset":24772,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":756,
+			"byteOffset":25276,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":756,
+			"byteOffset":26032,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":504,
+			"byteOffset":26788,
+			"target":34962
+		},
+		{
+			"buffer":0,
+			"byteLength":200,
+			"byteOffset":27292
+		},
+		{
+			"buffer":0,
+			"byteLength":600,
+			"byteOffset":27492
+		},
+		{
+			"buffer":0,
+			"byteLength":600,
+			"byteOffset":28092
+		},
+		{
+			"buffer":0,
+			"byteLength":600,
+			"byteOffset":28692
+		},
+		{
+			"buffer":0,
+			"byteLength":600,
+			"byteOffset":29292
 		}
 	],
 	"samplers":[
@@ -588,7 +940,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":21244,
+			"byteLength":29892,
 			"uri":"candle.bin"
 		}
 	]
