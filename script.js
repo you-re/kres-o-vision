@@ -62,20 +62,13 @@ let oneShootStartTime = [];
 
 // Reset scene
 let lastInteractionTime = Date.now();
-let interactionDetected = true;
+let interactionDetected = false;
 
-init();
-animate();
+loadScene();
 
-function init() {
-  // Scene setup
-  scene = new THREE.Scene();
-  {
-    const near = 10;
-    const far = 30;
-    scene.fog = new THREE.Fog(fogColor, near, far);
-  }
-  scene.background = fogColor;
+function loadScene() {
+  const loadingScreen = document.getElementById("loading-screen");
+  const loadingPercent = document.getElementById("loading-percent");
 
   // Camera setup
   camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
@@ -86,6 +79,68 @@ function init() {
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
+
+  // Controls for camera movement
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = false;
+  controls.autoRotate = true;
+  controls.autoRotateSpeed = -50.0;
+
+  // Scene setup
+  scene = new THREE.Scene();
+  {
+    const near = 10;
+    const far = 30;
+    scene.fog = new THREE.Fog(fogColor, near, far);
+  }
+  scene.background = fogColor;
+
+  // Add the navigation spheres
+  navigationSpheres();
+
+  // Track loaded objects
+  let objectsToLoad = 30; // Total number of objects to load
+  let objectsLoaded = 1;
+
+  function checkLoadingComplete() {
+    // Update the loading screen
+    objectsLoaded++;
+    loadingPercent.textContent = Math.round((objectsLoaded / objectsToLoad) * 100) + "%";
+
+    if (objectsLoaded === objectsToLoad) {
+      if (loadingScreen) {
+        loadingScreen.style.zIndex = "-1"; // Hide the loading screen
+        controls.autoRotateSpeed = -1.0;
+        controls.enableDamping = true;
+      }
+    }
+  }
+
+  // Load 3D models (GLTF)
+  loadModel('winnowing_basket_sim.gltf', "Winnowing_Basket_LP", new THREE.Vector3(-3, 0, 0), checkLoadingComplete);
+
+  loadModel('ox_thing.gltf', "Ox_Thing", new THREE.Vector3(3, 0, 0), checkLoadingComplete);
+
+  loadModel('obj/Brana.gltf', "Brana", new THREE.Vector3(0, 0, 3), checkLoadingComplete);
+
+  // Import all ceramic objects
+  for (let i = 1; i < 24; i++) {
+    let objectId = String(i).padStart(3, '0');
+    let gltfName = "obj/Ceramic" + objectId + ".gltf";
+    let importName = "Ceramic" + objectId;
+
+    loadModel(gltfName, importName, new THREE.Vector3(0, 0, 3), checkLoadingComplete);
+  }
+
+  modelGridArray('walls.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0.2, 0.2, 0.2), true, false, checkLoadingComplete);
+  modelGridArray('candle.gltf', new THREE.Vector3(0, -0.1, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0.1, 0), true, false, checkLoadingComplete);
+  modelGridArray('ground.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0, 0), true, false, checkLoadingComplete);
+
+  init();
+  animate();
+}
+
+function init() {
 
   // Shadows
   // renderer.shadowMap.enabled = true;
@@ -112,10 +167,6 @@ function init() {
   composer = new EffectComposer(renderer, renderTarget);
   composer.addPass(new RenderPass(scene, camera));
 
-  // Controls for camera movement
-  controls = new OrbitControls(camera, renderer.domElement);
-  controls.enableDamping = true;
-
   // Load HDRI as environment map
   const pmremGenerator = new PMREMGenerator(renderer);
   new RGBELoader()
@@ -127,30 +178,6 @@ function init() {
       hdrTexture.dispose();
       pmremGenerator.dispose();
     });
-
-  // Add the navigation spheres
-  navigationSpheres();
-
-  // Load 3D models (GLTF)
-  loadModel('winnowing_basket_sim.gltf', "Winnowing_Basket_LP", new THREE.Vector3(-3, 0, 0));
-
-  loadModel('ox_thing.gltf', "Ox_Thing", new THREE.Vector3(3, 0, 0));
-
-  loadModel('obj/Brana.gltf', "Brana", new THREE.Vector3(0, 0, 3));
-  // Import all ceramic objects
-  for (let i = 1; i < 24; i++) {
-      let objectId = String(i).padStart(3, '0');
-      let gltfName = "obj/Ceramic" + objectId + ".gltf";
-      let importName = "Ceramic" + objectId;
-
-      loadModel(gltfName, importName, new THREE.Vector3(0, 0, 3));
-    }
-
-  modelGridArray('walls.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0.2, 0.2, 0.2));
-  modelGridArray('candle.gltf', new THREE.Vector3(0, -0.1, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0.1, 0 ));
-  modelGridArray('ground.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27));
-
-  
 
   // FXAA
   const fxaaPass = new ShaderPass(FXAAShader);
