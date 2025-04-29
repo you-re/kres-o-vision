@@ -41,14 +41,7 @@ let lerpStartTarget = new THREE.Vector3();
 let lerpEndTarget = new THREE.Vector3();
 
 // Active object for animation 
-let active_object = "Winnowing_Basket_LP";
-
-// ACES Material
-const acesMaterial = new THREE.ShaderMaterial({
-  uniforms: ACESShader.uniforms,
-  vertexShader: ACESShader.vertexShader,
-  fragmentShader: ACESShader.fragmentShader
-});
+let active_object = "";
 
 // Animation stuff
 const clock = new THREE.Clock();
@@ -62,12 +55,14 @@ let mouse = new THREE.Vector2();
 
 let fogColor = new THREE.Color(0x0f0b0b);
 
+// OneShoot animation
 let oneShootCheck = false;
-let oneShotElapsedTime = 0;
-let oneShotAnimating = false;
-
 let oneShootObjects = [];
 let oneShootStartTime = [];
+
+// Reset scene
+let lastInteractionTime = Date.now();
+let interactionDetected = true;
 
 init();
 animate();
@@ -84,7 +79,7 @@ function init() {
 
   // Camera setup
   camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.set(1, 1, 1);
+  camera.position.set(1, 0.5, 1);
   camera.updateProjectionMatrix();
 
   // Renderer setup
@@ -131,16 +126,19 @@ function init() {
       scene.background = fogColor;
       hdrTexture.dispose();
       pmremGenerator.dispose();
-    });  
-  
-  // Load 3D model (GLTF)
-  loadModel('winnowing_basket_sim.gltf', "Winnowing_Basket_LP", new THREE.Vector3(0, 0, 0));
+    });
+
+  // Add the navigation spheres
+  navigationSpheres();
+
+  // Load 3D models (GLTF)
+  loadModel('winnowing_basket_sim.gltf', "Winnowing_Basket_LP", new THREE.Vector3(-3, 0, 0));
 
   loadModel('ox_thing.gltf', "Ox_Thing", new THREE.Vector3(3, 0, 0));
 
   loadModel('obj/Brana.gltf', "Brana", new THREE.Vector3(0, 0, 3));
   // Import all ceramic objects
-  for (let i = 0; i < 24; i++) {
+  for (let i = 1; i < 24; i++) {
       let objectId = String(i).padStart(3, '0');
       let gltfName = "obj/Ceramic" + objectId + ".gltf";
       let importName = "Ceramic" + objectId;
@@ -214,6 +212,11 @@ function init() {
   // Resize event listener
   window.addEventListener('resize', onWindowResize);
 
+  // Listen for user interactions
+  document.addEventListener('mousemove', resetInteractionTimer);
+  document.addEventListener('keydown', resetInteractionTimer);
+  document.addEventListener('click', resetInteractionTimer);
+
   composer.render();
 }
 
@@ -257,7 +260,10 @@ function oneShootAnimation(oneShootDelta) {
 }
 
 function animate() {
-  controls.update();
+  controls.update();  
+  
+  // Start checking for inactivity
+  checkUserInactivity();
   
   var camZPos = Math.min(1, Math.max(-1, camera.position.y));
   camera.position.set(camera.position.x, camZPos, camera.position.z);
@@ -320,11 +326,13 @@ function setCameraPosition(event) {
   // Find the intersected objects
   let intersects = raycaster.intersectObjects(scene.children, true); // true to include descendants
 
+  // If there are no intersections, return
   if (intersects.length === 0) return;
+
 
   let firstObjectName = intersects[0].object.name;
   console.log(firstObjectName);
-  if (firstObjectName != "Winnowing_Basket_LP" && firstObjectName != "Ox_Thing" && !firstObjectName.includes("Brana") && !firstObjectName.includes("Ceramic")) {
+  if (firstObjectName != "Winnowing_Basket_LP" && firstObjectName != "Ox_Thing" && !firstObjectName.includes("Brana") && !firstObjectName.includes("Ceramic") && firstObjectName != "NavigationSphere") {
     return;
   }
 
@@ -383,14 +391,13 @@ function loadModel(path, name = "", position = new THREE.Vector3(), onLoad = () 
       const mixer = new THREE.AnimationMixer(model);
       gltf.animations.forEach(clip => mixer.clipAction(clip).play());
       mixer.getRoot().name = name;
-      console.log(mixer.getRoot().name);
       mixers.push(mixer);
     }
 
     onLoad(model);
   });
 }
-  
+
 // Function to load models
 function modelGridArray(path, position = new THREE.Vector3(0, 0, 0), offset = new THREE.Vector3(), copies = new THREE.Vector3(), jitter = new THREE.Vector3(0, 0, 0), center = true, rotate = false, onLoad = () => {}) {
 
@@ -441,4 +448,68 @@ function modelGridArray(path, position = new THREE.Vector3(0, 0, 0), offset = ne
 
     onLoad(model);
   });
+}
+
+function resetInteractionTimer() {
+  // Reset the last interaction time
+  lastInteractionTime = Date.now();
+  interactionDetected = true;
+  // Disable auto-rotation
+  controls.autoRotate = false;
+}
+
+function checkUserInactivity() {
+  const currentTime = Date.now();
+  const inactivityDuration = (currentTime - lastInteractionTime) / 1000; // in seconds
+
+  if (inactivityDuration > 5 && interactionDetected) {
+    // Start lerping to start
+    lerpStartTime = clock.getElapsedTime();
+    isLerping = true;
+
+    // Reset the camera
+    lerpStartPosition.copy(camera.position);
+    lerpEndPosition.set(1, 0.5, 1)
+
+    lerpStartTarget.copy(controls.target);
+    lerpEndTarget.set(0, 0, 0);
+    interactionDetected = false;
+
+    // Update the text to prompt the user to interact
+    const objectNameDisplay = document.getElementById("object-name-display");
+    objectNameDisplay.textContent = "Try clicking on objects to interact!";
+
+    // Enable auto-rotation
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = -1.0;
+  }
+}
+
+function navigationSpheres (startPos = new THREE.Vector3(0, -1.5, 0), offset = new THREE.Vector3(3, 0, 3), copies = new THREE.Vector3(3, 1, 3))  {
+  const numCopies = copies.x * copies.z;
+  
+  startPos.x -= (copies.x - 1) * offset.x / 2;
+  startPos.y -= (copies.y - 1) * offset.y / 2;
+  startPos.z -= (copies.z - 1) * offset.z / 2;
+
+  for (let i = 0; i < numCopies; i++) {
+    const x = (i % copies.x) * offset.x;
+    const y = Math.floor(i / copies.x) % copies.y * offset.y;
+    const z = Math.floor(i / (copies.x * copies.y)) * offset.z;
+
+    const newPos = startPos.clone().add(new THREE.Vector3(x, y, z));
+
+    const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+    const sphereMaterial = new THREE.MeshPhongMaterial({
+      color: 0xff0000,
+      emissive: 0xff0000,
+      emissiveIntensity: 0.1,
+      transparent: true,
+      opacity: 0
+    });
+    const NavigationSphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+    NavigationSphere.position.copy(newPos);
+    NavigationSphere.name = "NavigationSphere";
+    scene.add(NavigationSphere);
+  }
 }

@@ -27,9 +27,15 @@
   </style>
 </head>
 <body>
+  
+  <video id="video" autoplay loop muted playsinline style="display:none">
+    <source src="tex/fireplace.mp4" type="video/mp4"/>
+    Your browser does not support the video tag.
+  </video>
+
   <div id="ui"></div>
     <div id="active-object-name" style="position: absolute; top: 2.5%; left: 50%; transform: translateX(-50%); text-align: center; max-width: 90%; word-wrap: break-word;">
-      <span id="object-name-display" style="font-size: 1.2em; pointer-events: none; user-select: none;">Try clicking on objects</span>
+      <span id="object-name-display" style="font-size: 1.2em; pointer-events: none; user-select: none;">Try clicking on objects to interact!</span>
     </div>
   </div>
   
