@@ -524,6 +524,7 @@ function checkUserInactivity() {
 
     // Update the text to prompt the user to interact
     if (objectNameDisplay) {
+      active_object = null;
       objectNameDisplay.textContent = startText;
     }
 
