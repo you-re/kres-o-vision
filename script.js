@@ -100,9 +100,6 @@ function loadScene() {
   }
   scene.background = fogColor;
 
-  // Add the navigation spheres
-  navigationSpheres();
-
   // Track loaded objects
   let objectsToLoad = 32; // Total number of objects to load
   let objectsLoaded = 0;
