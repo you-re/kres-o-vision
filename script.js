@@ -62,6 +62,13 @@ let mouse = new THREE.Vector2();
 
 let fogColor = new THREE.Color(0x0f0b0b);
 
+let oneShootCheck = false;
+let oneShotElapsedTime = 0;
+let oneShotAnimating = false;
+
+let oneShootObjects = [];
+let oneShootStartTime = [];
+
 init();
 animate();
 
@@ -128,11 +135,24 @@ function init() {
   
   // Load 3D model (GLTF)
   loadModel('winnowing_basket_sim.gltf', "Winnowing_Basket_LP", new THREE.Vector3(0, 0, 0));
+
   loadModel('ox_thing.gltf', "Ox_Thing", new THREE.Vector3(3, 0, 0));
-  loadModel('brana.gltf', "Brana", new THREE.Vector3(0, 0, 3));
+
+  loadModel('obj/Brana.gltf', "Brana", new THREE.Vector3(0, 0, 3));
+  // Import all ceramic objects
+  for (let i = 0; i < 24; i++) {
+      let objectId = String(i).padStart(3, '0');
+      let gltfName = "obj/Ceramic" + objectId + ".gltf";
+      let importName = "Ceramic" + objectId;
+
+      loadModel(gltfName, importName, new THREE.Vector3(0, 0, 3));
+    }
+
   modelGridArray('walls.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0.2, 0.2, 0.2));
   modelGridArray('candle.gltf', new THREE.Vector3(0, -0.1, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0.1, 0 ));
   modelGridArray('ground.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27));
+
+  
 
   // FXAA
   const fxaaPass = new ShaderPass(FXAAShader);
@@ -207,8 +227,36 @@ function onWindowResize() {
   grainPass.material.uniforms['width'].value = window.innerWidth;
 }
 
+function oneShootAnimation(oneShootDelta) {
+  // Check all the objects tagged for oneShootAnimation
+  for (let i = 0; i < oneShootObjects.length; i++) {
+    const objectName = oneShootObjects[i];
+    const elapsedTime = clock.getElapsedTime() - oneShootStartTime[i];
+
+    mixers.forEach(m => {
+      const rootMixerName = m.getRoot().name;
+
+      if (rootMixerName.includes(objectName)) {
+        // Check if the animation finished and reset it
+        if (elapsedTime > 4.4) { // Need to find a way to get the duration of the animation
+          m.setTime(0.0);
+        }
+        else {
+          // Update the animation
+          m.update(oneShootDelta);
+          }
+        }
+      });
+
+    if (elapsedTime > 4.4) { // Assuming 4.3 is the duration of the animation
+      oneShootObjects.splice(i, 1);
+      oneShootStartTime.splice(i, 1);
+      i--; // Adjust index after removal
+    }
+  }
+}
+
 function animate() {
-  requestAnimationFrame(animate);
   controls.update();
   
   var camZPos = Math.min(1, Math.max(-1, camera.position.y));
@@ -220,10 +268,13 @@ function animate() {
     if (m.getRoot().name.startsWith("Scene")) {
       m.update(delta / 2.0);
     }
-    if (m.getRoot().name === active_object) {
+    if (m.getRoot().name === active_object && !active_object.includes("Ceramic")) {
       m.update(delta);
     }
   });
+
+  // Not ideal but works for now
+  oneShootAnimation(delta)
 
   // Update Grain Pass
   grainPass.material.uniforms['time'].value += 0.001; 
@@ -244,41 +295,8 @@ function animate() {
       isLerping = false; // Stop lerping when done
     }
   }
+  requestAnimationFrame(animate);
 }
-
-/*
-// Create invisible spheres and store their positions
-const spherePositions = [
-  new THREE.Vector3(0, 0, 0),
-  new THREE.Vector3(3, 0, 0),
-  new THREE.Vector3(0, 0, 3),
-  new THREE.Vector3(3, 0, 3),
-];
-
-const spheres = [];
-spherePositions.forEach((position) => {
-  const geometry = new THREE.SphereGeometry(0.25, 16, 16);
-  const material = new THREE.MeshBasicMaterial({ visible: false }); // Invisible material
-  const sphere = new THREE.Mesh(geometry, material);
-  sphere.position.copy(position);
-  scene.add(sphere);
-  spheres.push(sphere);
-});
-
-// Update the raycaster to include spheres and store clicked position
-document.addEventListener('click', (event) => {
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-  raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObjects(spheres);
-
-  if (intersects.length > 0) {
-    const clickedPosition = intersects[0].object.position.clone();
-    console.log('Clicked position:', clickedPosition);
-  }
-});
-*/
 
 // Focus on click
 function setCameraPosition(event) {
@@ -305,26 +323,35 @@ function setCameraPosition(event) {
   if (intersects.length === 0) return;
 
   let firstObjectName = intersects[0].object.name;
-  if (firstObjectName != "Winnowing_Basket_LP" && firstObjectName!= "Ox_Thing" && firstObjectName != "BranaLP") {
+  console.log(firstObjectName);
+  if (firstObjectName != "Winnowing_Basket_LP" && firstObjectName != "Ox_Thing" && !firstObjectName.includes("Brana") && !firstObjectName.includes("Ceramic")) {
     return;
   }
 
-  active_object = intersects[0].object.name;
-
-  // Update the "object-name-display" element in the HTML
-  const objectNameDisplay = document.getElementById("object-name-display");
-  if (objectNameDisplay) {
-    objectNameDisplay.textContent = active_object;
+  if (firstObjectName.includes("Ceramic")) {
+    active_object = firstObjectName.split("_")[0];
+    oneShootCheck = true;
+    oneShootObjects.push(active_object);
+    oneShootStartTime.push(clock.getElapsedTime());
   }
 
-  console.log(active_object);
+  else {
+    active_object = intersects[0].object.name;
+
+    // Update the "object-name-display" element in the HTML
+    const objectNameDisplay = document.getElementById("object-name-display");
+    if (objectNameDisplay) {
+      objectNameDisplay.textContent = active_object;
+    }
+  }
+  
   // Get the position of the intersected object
   let intersectedObject = intersects[0].object;
   let newTargetPosition = intersectedObject.getWorldPosition(new THREE.Vector3());
 
-  newTargetPosition.x = Math.round(newTargetPosition.x, 0.5);
-  newTargetPosition.y = Math.round(newTargetPosition.y, 0.5);
-  newTargetPosition.z = Math.round(newTargetPosition.z, 0.5);
+  newTargetPosition.x = Math.round(newTargetPosition.x, 1.0);
+  newTargetPosition.y = 0;
+  newTargetPosition.z = Math.round(newTargetPosition.z, 1.0);
 
   if (newTargetPosition.equals(controls.target)) {
     return; // If the target is the same, do nothing
