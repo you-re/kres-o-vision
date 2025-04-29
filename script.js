@@ -63,8 +63,12 @@ let oneShootStartTime = [];
 // Reset scene
 let lastInteractionTime = Date.now();
 let interactionDetected = false;
+let objectNameDisplay = document.getElementById("object-name-display");
+const startText = "Try clicking on objects to interact!";
 
 loadScene();
+init();
+animate();
 
 function loadScene() {
   const loadingScreen = document.getElementById("loading-screen");
@@ -85,6 +89,7 @@ function loadScene() {
   controls.enableDamping = false;
   controls.autoRotate = true;
   controls.autoRotateSpeed = -50.0;
+  controls.enabled = false;
 
   // Scene setup
   scene = new THREE.Scene();
@@ -99,8 +104,8 @@ function loadScene() {
   navigationSpheres();
 
   // Track loaded objects
-  let objectsToLoad = 30; // Total number of objects to load
-  let objectsLoaded = 1;
+  let objectsToLoad = 32; // Total number of objects to load
+  let objectsLoaded = 0;
 
   function checkLoadingComplete() {
     // Update the loading screen
@@ -109,21 +114,32 @@ function loadScene() {
 
     if (objectsLoaded === objectsToLoad) {
       if (loadingScreen) {
-        loadingScreen.style.zIndex = "-1"; // Hide the loading screen
-        controls.autoRotateSpeed = -1.0;
-        controls.enableDamping = true;
+
+        // Wait for 2 seconds so all the objects can load in 
+        setTimeout(() => {        
+          loadingScreen.style.zIndex = "-1"; // Hide the loading screen
+          controls.autoRotateSpeed = -1.0;
+          controls.enableDamping = true;
+
+          // Set default text
+          objectNameDisplay.textContent = startText;
+
+          // Enable user controls
+          controls.enabled = true;
+
+          // Listen for mouse clicks
+          document.addEventListener('click', setCameraPosition, false);
+
+          // Listen for user interactions
+          document.addEventListener('mousemove', resetInteractionTimer);
+          document.addEventListener('keydown', resetInteractionTimer);
+          document.addEventListener('click', resetInteractionTimer);
+        }, 2000);
       }
     }
   }
 
-  // Load 3D models (GLTF)
-  loadModel('winnowing_basket_sim.gltf', "Winnowing_Basket_LP", new THREE.Vector3(-3, 0, 0), checkLoadingComplete);
-
-  loadModel('ox_thing.gltf', "Ox_Thing", new THREE.Vector3(3, 0, 0), checkLoadingComplete);
-
-  loadModel('obj/Brana.gltf', "Brana", new THREE.Vector3(0, 0, 3), checkLoadingComplete);
-
-  // Import all ceramic objects
+  // Import all ceramic objects (23)
   for (let i = 1; i < 24; i++) {
     let objectId = String(i).padStart(3, '0');
     let gltfName = "obj/Ceramic" + objectId + ".gltf";
@@ -132,12 +148,23 @@ function loadScene() {
     loadModel(gltfName, importName, new THREE.Vector3(0, 0, 3), checkLoadingComplete);
   }
 
-  modelGridArray('walls.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0.2, 0.2, 0.2), true, false, checkLoadingComplete);
-  modelGridArray('candle.gltf', new THREE.Vector3(0, -0.1, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0.1, 0), true, false, checkLoadingComplete);
-  modelGridArray('ground.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0, 0), true, false, checkLoadingComplete);
+  // Load 3D models (GLTF)
+  loadModel('obj/Winnowing_Basket.gltf', "Winnowing_Basket", new THREE.Vector3(-3, 0, 0), checkLoadingComplete);
 
-  init();
-  animate();
+  loadModel('obj/Flail.gltf', "Flail", new THREE.Vector3(0, -0.3, -3), checkLoadingComplete);
+  loadModel('obj/Curtain.gltf', "Curtain", new THREE.Vector3(0, 0, -3), checkLoadingComplete);
+
+  loadModel('obj/Sickle.gltf', "Sickle", new THREE.Vector3(3, 0, 0), checkLoadingComplete);
+
+  loadModel('obj/Yoke.gltf', "Yoke", new THREE.Vector3(0, -0.1, 0), checkLoadingComplete);
+
+  loadModel('obj/Harrow.gltf', "Harrow", new THREE.Vector3(0, 0, 3), checkLoadingComplete);
+
+  modelGridArray('walls.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0.2, 0.2, 0.2), true, false, checkLoadingComplete);
+
+  modelGridArray('candle.gltf', new THREE.Vector3(0, -0.1, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0.1, 0), true, false, checkLoadingComplete);
+
+  modelGridArray('ground.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0, 0), true, false, checkLoadingComplete);
 }
 
 function init() {
@@ -233,16 +260,8 @@ function init() {
   composer.addPass(edgePass);
   */
 
-  // Listen for mouse clicks
-  document.addEventListener('click', setCameraPosition, false);
-  
   // Resize event listener
   window.addEventListener('resize', onWindowResize);
-
-  // Listen for user interactions
-  document.addEventListener('mousemove', resetInteractionTimer);
-  document.addEventListener('keydown', resetInteractionTimer);
-  document.addEventListener('click', resetInteractionTimer);
 
   composer.render();
 }
@@ -359,27 +378,28 @@ function setCameraPosition(event) {
 
   let firstObjectName = intersects[0].object.name;
   console.log(firstObjectName);
-  if (firstObjectName != "Winnowing_Basket_LP" && firstObjectName != "Ox_Thing" && !firstObjectName.includes("Brana") && !firstObjectName.includes("Ceramic") && firstObjectName != "NavigationSphere") {
+  if (!firstObjectName.includes("Sickle") && firstObjectName != ("Winnowing_Basket") && firstObjectName != "Yoke" && !firstObjectName.includes("Harrow") && !firstObjectName.includes("Flail") && !firstObjectName.includes("Ceramic") && firstObjectName != "NavigationSphere") {
     return;
   }
 
   if (firstObjectName.includes("Ceramic")) {
+    objectNameDisplay.textContent = "Harrow";
     active_object = firstObjectName.split("_")[0];
     oneShootCheck = true;
     oneShootObjects.push(active_object);
     oneShootStartTime.push(clock.getElapsedTime());
   }
 
-  else {
-    active_object = intersects[0].object.name;
-
-    // Update the "object-name-display" element in the HTML
-    const objectNameDisplay = document.getElementById("object-name-display");
-    if (objectNameDisplay) {
-      objectNameDisplay.textContent = active_object;
-    }
+  active_object = intersects[0].object.name;
+  // Update the "object-name-display" element in the HTML
+  if (active_object.includes("NavigationSphere")) {
+    active_object = startText;
   }
-  
+
+  if (objectNameDisplay && !active_object.includes("Ceramic")) {
+    objectNameDisplay.textContent = active_object.replace("_", " ");
+  }
+
   // Get the position of the intersected object
   let intersectedObject = intersects[0].object;
   let newTargetPosition = intersectedObject.getWorldPosition(new THREE.Vector3());
@@ -403,7 +423,7 @@ function setCameraPosition(event) {
 }
 
 // Function to load models
-function loadModel(path, name = "", position = new THREE.Vector3(), onLoad = () => {}) {
+function loadModel(path, name = "", position = new THREE.Vector3(0, 0, 0), onLoad = () => {}) {
   loader.load(path, (gltf) => {
     const model = gltf.scene;
 
@@ -503,8 +523,9 @@ function checkUserInactivity() {
     interactionDetected = false;
 
     // Update the text to prompt the user to interact
-    const objectNameDisplay = document.getElementById("object-name-display");
-    objectNameDisplay.textContent = "Try clicking on objects to interact!";
+    if (objectNameDisplay) {
+      objectNameDisplay.textContent = startText;
+    }
 
     // Enable auto-rotation
     controls.autoRotate = true;
@@ -512,7 +533,7 @@ function checkUserInactivity() {
   }
 }
 
-function navigationSpheres (startPos = new THREE.Vector3(0, -1.5, 0), offset = new THREE.Vector3(3, 0, 3), copies = new THREE.Vector3(3, 1, 3))  {
+function navigationSpheres (startPos = new THREE.Vector3(0, -1.5, 0), offset = new THREE.Vector3(3, 0, 3), copies = new THREE.Vector3(1, 1, 1))  {
   const numCopies = copies.x * copies.z;
   
   startPos.x -= (copies.x - 1) * offset.x / 2;
@@ -526,7 +547,7 @@ function navigationSpheres (startPos = new THREE.Vector3(0, -1.5, 0), offset = n
 
     const newPos = startPos.clone().add(new THREE.Vector3(x, y, z));
 
-    const sphereGeometry = new THREE.SphereGeometry(0.5, 32, 32);
+    const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
     const sphereMaterial = new THREE.MeshPhongMaterial({
       color: 0xff0000,
       emissive: 0xff0000,

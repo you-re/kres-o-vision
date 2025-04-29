@@ -3,9 +3,6 @@
 		"generator":"Khronos glTF Blender I/O v4.4.55",
 		"version":"2.0"
 	},
-	"extensionsUsed":[
-		"KHR_materials_specular"
-	],
 	"scene":0,
 	"scenes":[
 		{
@@ -275,25 +272,14 @@
 			"emissiveTexture":{
 				"index":0
 			},
-			"extensions":{
-				"KHR_materials_specular":{
-					"specularTexture":{
-						"index":1
-					}
-				}
-			},
-			"name":"BranaLP",
-			"normalTexture":{
-				"index":2
-			},
+			"name":"Harrow",
 			"pbrMetallicRoughness":{
-				"baseColorTexture":{
-					"index":3
-				},
-				"metallicRoughnessTexture":{
-					"index":4
-				},
-				"roughnessFactor":0.5
+				"baseColorFactor":[
+					0,
+					0,
+					0,
+					1
+				]
 			}
 		}
 	],
@@ -393,22 +379,6 @@
 		{
 			"sampler":0,
 			"source":0
-		},
-		{
-			"sampler":0,
-			"source":1
-		},
-		{
-			"sampler":0,
-			"source":2
-		},
-		{
-			"sampler":0,
-			"source":3
-		},
-		{
-			"sampler":0,
-			"source":4
 		}
 	],
 	"images":[
@@ -416,26 +386,6 @@
 			"mimeType":"image/jpeg",
 			"name":"BranaLP Diffuse Baked.jpg",
 			"uri":"../tex/brana/BranaLP%20Diffuse%20Baked.jpg"
-		},
-		{
-			"mimeType":"image/jpeg",
-			"name":"BranaLP Specular.jpg",
-			"uri":"../tex/brana/BranaLP%20Specular.jpg"
-		},
-		{
-			"mimeType":"image/jpeg",
-			"name":"BranaLP Normal.jpg",
-			"uri":"../tex/brana/BranaLP%20Normal.jpg"
-		},
-		{
-			"mimeType":"image/jpeg",
-			"name":"BranaLP Diffuse.jpg",
-			"uri":"../tex/brana/BranaLP%20Diffuse.jpg"
-		},
-		{
-			"mimeType":"image/jpeg",
-			"name":"BranaLP Metallic.jpg",
-			"uri":"../tex/brana/BranaLP%20Metallic.jpg"
 		}
 	],
 	"accessors":[
@@ -482,7 +432,7 @@
 		{
 			"bufferView":5,
 			"componentType":5126,
-			"count":175,
+			"count":177,
 			"max":[
 				0.015502670779824257,
 				0.019279999658465385,
@@ -498,19 +448,19 @@
 		{
 			"bufferView":6,
 			"componentType":5126,
-			"count":175,
+			"count":177,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":7,
 			"componentType":5126,
-			"count":175,
+			"count":177,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":8,
 			"componentType":5126,
-			"count":175,
+			"count":177,
 			"type":"VEC2"
 		},
 		{
@@ -797,218 +747,218 @@
 		},
 		{
 			"buffer":0,
-			"byteLength":2100,
+			"byteLength":2124,
 			"byteOffset":5720,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":2100,
-			"byteOffset":7820,
+			"byteLength":2124,
+			"byteOffset":7844,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":1400,
-			"byteOffset":9920,
+			"byteLength":1416,
+			"byteOffset":9968,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":1400,
-			"byteOffset":11320,
+			"byteLength":1416,
+			"byteOffset":11384,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1188,
-			"byteOffset":12720,
+			"byteOffset":12800,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":1776,
-			"byteOffset":13908,
+			"byteOffset":13988,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1776,
-			"byteOffset":15684,
+			"byteOffset":15764,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1184,
-			"byteOffset":17460,
+			"byteOffset":17540,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1184,
-			"byteOffset":18644,
+			"byteOffset":18724,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":912,
-			"byteOffset":19828,
+			"byteOffset":19908,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":1500,
-			"byteOffset":20740,
+			"byteOffset":20820,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1500,
-			"byteOffset":22240,
+			"byteOffset":22320,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1000,
-			"byteOffset":23740,
+			"byteOffset":23820,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1000,
-			"byteOffset":24740,
+			"byteOffset":24820,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":744,
-			"byteOffset":25740,
+			"byteOffset":25820,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":1584,
-			"byteOffset":26484,
+			"byteOffset":26564,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1584,
-			"byteOffset":28068,
+			"byteOffset":28148,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1056,
-			"byteOffset":29652,
+			"byteOffset":29732,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1056,
-			"byteOffset":30708,
+			"byteOffset":30788,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":768,
-			"byteOffset":31764,
+			"byteOffset":31844,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":1092,
-			"byteOffset":32532,
+			"byteOffset":32612,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":1092,
-			"byteOffset":33624,
+			"byteOffset":33704,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":728,
-			"byteOffset":34716,
+			"byteOffset":34796,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":728,
-			"byteOffset":35444,
+			"byteOffset":35524,
 			"target":34962
 		},
 		{
 			"buffer":0,
 			"byteLength":504,
-			"byteOffset":36172,
+			"byteOffset":36252,
 			"target":34963
 		},
 		{
 			"buffer":0,
 			"byteLength":480,
-			"byteOffset":36676
+			"byteOffset":36756
 		},
 		{
 			"buffer":0,
 			"byteLength":1440,
-			"byteOffset":37156
+			"byteOffset":37236
 		},
 		{
 			"buffer":0,
 			"byteLength":1920,
-			"byteOffset":38596
+			"byteOffset":38676
 		},
 		{
 			"buffer":0,
 			"byteLength":1440,
-			"byteOffset":40516
+			"byteOffset":40596
 		},
 		{
 			"buffer":0,
 			"byteLength":1920,
-			"byteOffset":41956
+			"byteOffset":42036
 		},
 		{
 			"buffer":0,
 			"byteLength":1440,
-			"byteOffset":43876
+			"byteOffset":43956
 		},
 		{
 			"buffer":0,
 			"byteLength":1920,
-			"byteOffset":45316
+			"byteOffset":45396
 		},
 		{
 			"buffer":0,
 			"byteLength":1440,
-			"byteOffset":47236
+			"byteOffset":47316
 		},
 		{
 			"buffer":0,
 			"byteLength":1920,
-			"byteOffset":48676
+			"byteOffset":48756
 		},
 		{
 			"buffer":0,
 			"byteLength":1440,
-			"byteOffset":50596
+			"byteOffset":50676
 		},
 		{
 			"buffer":0,
 			"byteLength":1920,
-			"byteOffset":52036
+			"byteOffset":52116
 		},
 		{
 			"buffer":0,
 			"byteLength":1440,
-			"byteOffset":53956
+			"byteOffset":54036
 		},
 		{
 			"buffer":0,
 			"byteLength":1920,
-			"byteOffset":55396
+			"byteOffset":55476
 		}
 	],
 	"samplers":[
@@ -1019,7 +969,7 @@
 	],
 	"buffers":[
 		{
-			"byteLength":57316,
+			"byteLength":57396,
 			"uri":"Ceramic006.bin"
 		}
 	]
