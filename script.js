@@ -349,22 +349,24 @@ function setCameraPosition(event) {
   let firstObjectName = intersects[0].object.name;
   console.log(firstObjectName);
 
-  /*
-  const raycastObjects = ["Sickle", "Winnowing_Basket", "Yoke", "Harrow", "Flail", "Ceramic", "NavigationSphere"];
+  const raycastObjects = ["Sickle", "Winnowing_Basket", "Yoke", "Harrow", "Flail", "Ceramic"];
+  let check = true;
 
-
+  // Check if the object is navigable
   raycastObjects.forEach(object => {
     if (firstObjectName.includes(object)) {
+      check = false;
+      active_object = object.replace("_", " ");
+      return;
     }
-    
   });
-  */
-  // Clean this up later
 
-  if (!firstObjectName.includes("Sickle") && firstObjectName != ("Winnowing_Basket") && firstObjectName != "Yoke" && !firstObjectName.includes("Harrow") && !firstObjectName.includes("Flail") && !firstObjectName.includes("Ceramic") && firstObjectName != "NavigationSphere") {
+  // If the object is not navigable, return
+  if (check) {
     return;
   }
 
+  // Ceramics are part of the Harrow + one shoots
   if (firstObjectName.includes("Ceramic")) {
     objectNameDisplay.textContent = "Harrow";
     active_object = firstObjectName.split("_")[0];
@@ -375,9 +377,6 @@ function setCameraPosition(event) {
 
   active_object = intersects[0].object.name;
   // Update the "object-name-display" element in the HTML
-  if (active_object.includes("NavigationSphere")) {
-    active_object = startText;
-  }
 
   if (objectNameDisplay && !active_object.includes("Ceramic")) {
     objectNameDisplay.textContent = active_object.replace("_", " ");
