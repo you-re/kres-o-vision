@@ -345,13 +345,13 @@ function setCameraPosition(event) {
 
   // If there are no intersections, return
   if (intersects.length === 0) return;
-
+  
+  let firstObjectName = intersects[0].object.name;
+  console.log(firstObjectName);
 
   /*
   const raycastObjects = ["Sickle", "Winnowing_Basket", "Yoke", "Harrow", "Flail", "Ceramic", "NavigationSphere"];
 
-  let firstObjectName = intersects[0].object.name;
-  console.log(firstObjectName);
 
   raycastObjects.forEach(object => {
     if (firstObjectName.includes(object)) {
@@ -360,7 +360,7 @@ function setCameraPosition(event) {
   });
   */
   // Clean this up later
-  
+
   if (!firstObjectName.includes("Sickle") && firstObjectName != ("Winnowing_Basket") && firstObjectName != "Yoke" && !firstObjectName.includes("Harrow") && !firstObjectName.includes("Flail") && !firstObjectName.includes("Ceramic") && firstObjectName != "NavigationSphere") {
     return;
   }
