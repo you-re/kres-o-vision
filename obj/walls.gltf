@@ -4,7 +4,6 @@
 		"version":"2.0"
 	},
 	"extensionsUsed":[
-		"KHR_materials_emissive_strength",
 		"KHR_materials_specular"
 	],
 	"scene":0,
@@ -19,12 +18,7 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"FloorLP",
-			"translation":[
-				0,
-				-2,
-				0
-			]
+			"name":"WallsLP"
 		}
 	],
 	"materials":[
@@ -39,32 +33,30 @@
 				"index":0
 			},
 			"extensions":{
-				"KHR_materials_emissive_strength":{
-					"emissiveStrength":5
-				},
 				"KHR_materials_specular":{
 					"specularTexture":{
 						"index":1
 					}
 				}
 			},
-			"name":"FloorLP",
+			"name":"Walls",
 			"normalTexture":{
-				"index":2,
-				"scale":2
+				"index":2
 			},
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":3
 				},
 				"metallicFactor":0,
-				"roughnessFactor":0.5
+				"metallicRoughnessTexture":{
+					"index":4
+				}
 			}
 		}
 	],
 	"meshes":[
 		{
-			"name":"Plane.009",
+			"name":"Circle.002",
 			"primitives":[
 				{
 					"attributes":{
@@ -94,89 +86,98 @@
 		{
 			"sampler":0,
 			"source":3
+		},
+		{
+			"sampler":0,
+			"source":4
 		}
 	],
 	"images":[
 		{
 			"mimeType":"image/jpeg",
-			"name":"Floor Diffuse Bake",
-			"uri":"tex/floor/Floor%20Diffuse%20Bake.jpg"
+			"name":"walls_diffuse_bake",
+			"uri":"../tex/walls/walls_diffuse_bake.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
-			"name":"Floor Specular",
-			"uri":"tex/floor/Floor%20Specular.jpg"
+			"name":"walls_specularity",
+			"uri":"../tex/walls/walls_specularity.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
-			"name":"Floor Normal",
-			"uri":"tex/floor/Floor%20Normal.jpg"
+			"name":"walls_normal",
+			"uri":"../tex/walls/walls_normal.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
-			"name":"Floor Diffuse",
-			"uri":"tex/floor/Floor%20Diffuse.jpg"
+			"name":"walls_diffuse",
+			"uri":"../tex/walls/walls_diffuse.jpg"
+		},
+		{
+			"mimeType":"image/png",
+			"name":"walls_roughness",
+			"uri":"../tex/walls/walls_roughness.png"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":13309,
+			"count":17408,
 			"max":[
-				4.505926609039307,
-				0.035207293927669525,
-				4.504221439361572
+				1.5303891897201538,
+				2.1280832290649414,
+				1.7376513481140137
 			],
 			"min":[
-				-4.503896236419678,
-				-0.04723374918103218,
-				-4.506555080413818
+				-1.7446730136871338,
+				-1.5168275833129883,
+				-1.531720519065857
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":13309,
+			"count":17408,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":13309,
+			"count":17408,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":78642,
+			"count":28554,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":159708,
+			"byteLength":208896,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":159708,
-			"byteOffset":159708,
+			"byteLength":208896,
+			"byteOffset":208896,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":106472,
-			"byteOffset":319416,
+			"byteLength":139264,
+			"byteOffset":417792,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":157284,
-			"byteOffset":425888,
+			"byteLength":57108,
+			"byteOffset":557056,
 			"target":34963
 		}
 	],
@@ -188,8 +189,8 @@
 	],
 	"buffers":[
 		{
-			"byteLength":583172,
-			"uri":"floor.bin"
+			"byteLength":614164,
+			"uri":"walls.bin"
 		}
 	]
 }

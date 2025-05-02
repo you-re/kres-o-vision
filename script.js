@@ -157,29 +157,15 @@ function loadScene() {
 
   loadModel('obj/Harrow.gltf', "Harrow", new THREE.Vector3(0, 0, 3), checkLoadingComplete);
 
-  modelGridArray('walls.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0.2, 0.2, 0.2), true, false, checkLoadingComplete);
+  modelGridArray('obj/walls.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0.2, 0.2, 0.2), true, false, checkLoadingComplete);
 
-  modelGridArray('candle.gltf', new THREE.Vector3(0, -0.1, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0.1, 0), true, false, checkLoadingComplete);
+  modelGridArray('obj/candle.gltf', new THREE.Vector3(0, -0.1, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0.1, 0), true, false, checkLoadingComplete);
 
-  modelGridArray('ground.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0, 0), true, false, checkLoadingComplete);
+  modelGridArray('obj/ground.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0, 0), true, false, checkLoadingComplete);
 }
 
 function init() {
 
-  // Shadows
-  // renderer.shadowMap.enabled = true;
-  // renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-  /*
-  // Light
-  const light = new THREE.DirectionalLight(0xffffff, 5.0);
-
-  light.position.set(0, 10, 0);
-  light.target.position.set(-5, 0, 0);
-
-  scene.add(light);
-  scene.add(light.target); 
-  */
   document.body.appendChild(renderer.domElement);
 
   // Postprocessing setup
@@ -244,18 +230,6 @@ function init() {
   ACESPass.material.uniforms['Gamma'].value = 2.2;
   ACESPass.material.uniforms['toneMappingExposure'].value = 1.0;
   composer.addPass(ACESPass);
-  
-  /*
-  // Toon Post Processing
-  const toonPass = new ShaderPass(toonShader);
-  composer.addPass(toonPass);
-  
-  // Edge Detect
-  const edgePass = new ShaderPass(edgeDetectShader);
-  edgePass.material.uniforms['width'].value = window.innerWidth;
-  edgePass.material.uniforms['height'].value = window.innerHeight;
-  composer.addPass(edgePass);
-  */
 
   // Resize event listener
   window.addEventListener('resize', onWindowResize);
@@ -373,8 +347,20 @@ function setCameraPosition(event) {
   if (intersects.length === 0) return;
 
 
+  /*
+  const raycastObjects = ["Sickle", "Winnowing_Basket", "Yoke", "Harrow", "Flail", "Ceramic", "NavigationSphere"];
+
   let firstObjectName = intersects[0].object.name;
   console.log(firstObjectName);
+
+  raycastObjects.forEach(object => {
+    if (firstObjectName.includes(object)) {
+    }
+    
+  });
+  */
+  // Clean this up later
+  
   if (!firstObjectName.includes("Sickle") && firstObjectName != ("Winnowing_Basket") && firstObjectName != "Yoke" && !firstObjectName.includes("Harrow") && !firstObjectName.includes("Flail") && !firstObjectName.includes("Ceramic") && firstObjectName != "NavigationSphere") {
     return;
   }

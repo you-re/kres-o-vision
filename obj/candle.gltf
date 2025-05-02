@@ -491,42 +491,42 @@
 		{
 			"mimeType":"image/jpeg",
 			"name":"Candle Holder Diffuse Bake.jpg",
-			"uri":"tex/candle_holder/Candle%20Holder%20Diffuse%20Bake.jpg"
+			"uri":"../tex/candle_holder/Candle%20Holder%20Diffuse%20Bake.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
 			"name":"Candle Holder Specular.jpg",
-			"uri":"tex/candle_holder/Candle%20Holder%20Specular.jpg"
+			"uri":"../tex/candle_holder/Candle%20Holder%20Specular.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
 			"name":"Candle Holder Normal.jpg",
-			"uri":"tex/candle_holder/Candle%20Holder%20Normal.jpg"
+			"uri":"../tex/candle_holder/Candle%20Holder%20Normal.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
 			"name":"Candle Holder Diffuse.jpg",
-			"uri":"tex/candle_holder/Candle%20Holder%20Diffuse.jpg"
+			"uri":"../tex/candle_holder/Candle%20Holder%20Diffuse.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
 			"name":"Candle Holder Metallic.jpg",
-			"uri":"tex/candle_holder/Candle%20Holder%20Metallic.jpg"
+			"uri":"../tex/candle_holder/Candle%20Holder%20Metallic.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
 			"name":"Candle Diffuse Bake.jpg",
-			"uri":"tex/candle/Candle%20Diffuse%20Bake.jpg"
+			"uri":"../tex/candle/Candle%20Diffuse%20Bake.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
 			"name":"Candle Normal",
-			"uri":"tex/candle/Candle%20Normal.jpg"
+			"uri":"../tex/candle/Candle%20Normal.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
 			"name":"Candle Diffuse",
-			"uri":"tex/candle/Candle%20Diffuse.jpg"
+			"uri":"../tex/candle/Candle%20Diffuse.jpg"
 		}
 	],
 	"accessors":[

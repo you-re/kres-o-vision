@@ -18,7 +18,7 @@
 	"nodes":[
 		{
 			"mesh":0,
-			"name":"WallsLP"
+			"name":"GroundLP"
 		}
 	],
 	"materials":[
@@ -39,24 +39,23 @@
 					}
 				}
 			},
-			"name":"Walls",
+			"name":"Ground",
 			"normalTexture":{
-				"index":2
+				"index":2,
+				"scale":2
 			},
 			"pbrMetallicRoughness":{
 				"baseColorTexture":{
 					"index":3
 				},
 				"metallicFactor":0,
-				"metallicRoughnessTexture":{
-					"index":4
-				}
+				"roughnessFactor":0.5
 			}
 		}
 	],
 	"meshes":[
 		{
-			"name":"Circle.002",
+			"name":"Plane.017",
 			"primitives":[
 				{
 					"attributes":{
@@ -86,98 +85,89 @@
 		{
 			"sampler":0,
 			"source":3
-		},
-		{
-			"sampler":0,
-			"source":4
 		}
 	],
 	"images":[
 		{
 			"mimeType":"image/jpeg",
-			"name":"walls_diffuse_bake",
-			"uri":"tex/walls/walls_diffuse_bake.jpg"
+			"name":"ground_diffuse_bake",
+			"uri":"../tex/ground/ground_diffuse_bake.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
-			"name":"walls_specularity",
-			"uri":"tex/walls/walls_specularity.jpg"
+			"name":"ground_specularity",
+			"uri":"../tex/ground/ground_specularity.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
-			"name":"walls_normal",
-			"uri":"tex/walls/walls_normal.jpg"
+			"name":"ground_normal",
+			"uri":"../tex/ground/ground_normal.jpg"
 		},
 		{
 			"mimeType":"image/jpeg",
-			"name":"walls_diffuse",
-			"uri":"tex/walls/walls_diffuse.jpg"
-		},
-		{
-			"mimeType":"image/png",
-			"name":"walls_roughness",
-			"uri":"tex/walls/walls_roughness.png"
+			"name":"ground_diffuse",
+			"uri":"../tex/ground/ground_diffuse.jpg"
 		}
 	],
 	"accessors":[
 		{
 			"bufferView":0,
 			"componentType":5126,
-			"count":17408,
+			"count":5346,
 			"max":[
-				1.5303891897201538,
-				2.1280832290649414,
-				1.7376513481140137
+				4.499996662139893,
+				-1.2684309482574463,
+				4.500001430511475
 			],
 			"min":[
-				-1.7446730136871338,
-				-1.5168275833129883,
-				-1.531720519065857
+				-4.500002384185791,
+				-1.7386895418167114,
+				-4.499998569488525
 			],
 			"type":"VEC3"
 		},
 		{
 			"bufferView":1,
 			"componentType":5126,
-			"count":17408,
+			"count":5346,
 			"type":"VEC3"
 		},
 		{
 			"bufferView":2,
 			"componentType":5126,
-			"count":17408,
+			"count":5346,
 			"type":"VEC2"
 		},
 		{
 			"bufferView":3,
 			"componentType":5123,
-			"count":28554,
+			"count":31443,
 			"type":"SCALAR"
 		}
 	],
 	"bufferViews":[
 		{
 			"buffer":0,
-			"byteLength":208896,
+			"byteLength":64152,
 			"byteOffset":0,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":208896,
-			"byteOffset":208896,
+			"byteLength":64152,
+			"byteOffset":64152,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":139264,
-			"byteOffset":417792,
+			"byteLength":42768,
+			"byteOffset":128304,
 			"target":34962
 		},
 		{
 			"buffer":0,
-			"byteLength":57108,
-			"byteOffset":557056,
+			"byteLength":62886,
+			"byteOffset":171072,
 			"target":34963
 		}
 	],
@@ -189,8 +179,8 @@
 	],
 	"buffers":[
 		{
-			"byteLength":614164,
-			"uri":"walls.bin"
+			"byteLength":233960,
+			"uri":"ground.bin"
 		}
 	]
 }
