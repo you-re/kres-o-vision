@@ -13,9 +13,14 @@ export const ACESShader = {
     name: 'ACESShader',
   
     uniforms: {
-      'tDiffuse': { value: null },      // The input texture (typically the framebuffer)
-      'toneMappingExposure': { value: 1.0 }, // Exposure adjustment
-      'Gamma': { value: 2.2 }    // Gamma correction value
+      // The input texture
+      'tDiffuse': { value: null },
+      // Exposure adjustment
+      'toneMappingExposure': { value: 1.0 },
+      // Gamma correction value
+      'Gamma': { value: 2.2 }, 
+      // Pass-through
+      'passthrough': { value: 1 } 
     },
   
     vertexShader: /* glsl */`
@@ -31,6 +36,7 @@ export const ACESShader = {
       uniform sampler2D tDiffuse;
       uniform float toneMappingExposure;
       uniform float Gamma;
+      uniform int passthrough;
       varying vec2 vUv;
   
       // Constants for the ACES input and output matrix transformations
@@ -55,24 +61,28 @@ export const ACESShader = {
   
       void main() {
         // Fetch the color from the texture (input image)
-        vec3 texColor = texture2D(tDiffuse, vUv).rgb;
+        vec3 inputColor = texture2D(tDiffuse, vUv).rgb;
+        vec3 toneMappedColor = texture2D(tDiffuse, vUv).rgb;
   
         // Exposure adjustment
-        texColor *= toneMappingExposure;
+        toneMappedColor *= toneMappingExposure;
   
         // Apply ACES color space transformations
-        texColor = ACESInputMat * texColor;
-        texColor = RRTAndODTFit(texColor);
-        texColor = ACESOutputMat * texColor;
+        toneMappedColor = ACESInputMat * toneMappedColor;
+        toneMappedColor = RRTAndODTFit(toneMappedColor);
+        toneMappedColor = ACESOutputMat * toneMappedColor;
   
         // Clamp the values to [0, 1]
-        texColor = clamp(texColor, 0.0, 1.0);
+        toneMappedColor = clamp(toneMappedColor, 0.0, 1.0);
   
         // Apply gamma correction once after the tonemapping
-        texColor = pow(texColor, vec3(1.0 / Gamma));
+        toneMappedColor = pow(toneMappedColor, vec3(1.0 / Gamma));
+
+        // Exposure for the input color
+        inputColor *= toneMappingExposure;
   
         // Output the final color
-        gl_FragColor = vec4(texColor, 1.0);
+        gl_FragColor = vec4(inputColor, 1.0) * vec4(1 - passthrough) + vec4(toneMappedColor, 1.0) * vec4(passthrough);
       }
     `
   };

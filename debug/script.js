@@ -1,32 +1,32 @@
 "use strict";
-import * as THREE from './three/build/three.module.js';
-import { OrbitControls } from './three/examples/jsm/controls/OrbitControls.js';
-import { GLTFLoader } from './three/examples/jsm/loaders/GLTFLoader.js';
-import { EffectComposer } from './three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from './three/examples/jsm/postprocessing/RenderPass.js';
+import * as THREE from '../three/build/three.module.js';
+import { OrbitControls } from '../three/examples/jsm/controls/OrbitControls.js';
+import { GLTFLoader } from '../three/examples/jsm/loaders/GLTFLoader.js';
+import { EffectComposer } from '../three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from '../three/examples/jsm/postprocessing/RenderPass.js';
 
 // HDRI
-import { RGBELoader } from './three/examples/jsm/loaders/RGBELoader.js';
-import { PMREMGenerator } from './three/build/three.module.js';
+import { RGBELoader } from '../three/examples/jsm/loaders/RGBELoader.js';
+import { PMREMGenerator } from '../three/build/three.module.js';
 
 // Bloom + Tonemapping
-import { UnrealBloomPass } from './three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { UnrealBloomPass } from '../three/examples/jsm/postprocessing/UnrealBloomPass.js';
 
 // FXAA
-import { ShaderPass } from './three/examples/jsm/postprocessing/ShaderPass.js';
-import { FXAAShader } from './three/examples/jsm/shaders/FXAAShader.js';
+import { ShaderPass } from '../three/examples/jsm/postprocessing/ShaderPass.js';
+import { FXAAShader } from '../three/examples/jsm/shaders/FXAAShader.js';
 
 // Chromatic Aberration
-import { ChromaticAberrationShader } from './shaders/ChromaticAberrationShader.js';
+import { ChromaticAberrationShader } from '../shaders/ChromaticAberrationShader.js';
 
 // Grain
-import { GrainShader } from './shaders/GrainShader.js';
+import { GrainShader } from '../shaders/GrainShader.js';
 
 // Vignette
-import { VignetteShader } from './three/examples/jsm/shaders/VignetteShader.js';
+import { VignetteShader } from '../three/examples/jsm/shaders/VignetteShader.js';
 
 // ACES Transform
-import { ACESShader } from './shaders/ACESShader.js';
+import { ACESShader } from '../shaders/ACESShader.js';
 
 let scene, camera, renderer, controls, composer;
 
@@ -146,29 +146,29 @@ function loadScene() {
   // Import all ceramic objects (23)
   for (let i = 1; i < 24; i++) {
     let objectId = String(i).padStart(3, '0');
-    let gltfName = "obj/Ceramic" + objectId + ".gltf";
+    let gltfName = "../obj/Ceramic" + objectId + ".gltf";
     let importName = "Ceramic" + objectId;
 
     loadModel(gltfName, importName, new THREE.Vector3(0, 0, 3), checkLoadingComplete);
   }
 
   // Load 3D models (GLTF)
-  loadModel('obj/Winnowing_Basket.gltf', "Winnowing_Basket", new THREE.Vector3(-3, 0, 0), checkLoadingComplete);
+  loadModel('../obj/Winnowing_Basket.gltf', "Winnowing_Basket", new THREE.Vector3(-3, 0, 0), checkLoadingComplete);
 
-  loadModel('obj/Flail.gltf', "Flail", new THREE.Vector3(0, -0.3, -3), checkLoadingComplete);
-  loadModel('obj/Curtain.gltf', "Curtain", new THREE.Vector3(0, 0, -3), checkLoadingComplete);
+  loadModel('../obj/Flail.gltf', "Flail", new THREE.Vector3(0, -0.3, -3), checkLoadingComplete);
+  loadModel('../obj/Curtain.gltf', "Curtain", new THREE.Vector3(0, 0, -3), checkLoadingComplete);
 
-  loadModel('obj/Sickle.gltf', "Sickle", new THREE.Vector3(3, 0, 0), checkLoadingComplete);
+  loadModel('../obj/Sickle.gltf', "Sickle", new THREE.Vector3(3, 0, 0), checkLoadingComplete);
 
-  loadModel('obj/Yoke.gltf', "Yoke", new THREE.Vector3(0, -0.1, 0), checkLoadingComplete);
+  loadModel('../obj/Yoke.gltf', "Yoke", new THREE.Vector3(0, -0.1, 0), checkLoadingComplete);
 
-  loadModel('obj/Harrow.gltf', "Harrow", new THREE.Vector3(0, 0, 3), checkLoadingComplete);
+  loadModel('../obj/Harrow.gltf', "Harrow", new THREE.Vector3(0, 0, 3), checkLoadingComplete);
 
-  modelGridArray('obj/walls.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0.2, 0.2, 0.2), true, false, checkLoadingComplete);
+  modelGridArray('../obj/walls.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0.2, 0.2, 0.2), true, false, checkLoadingComplete);
 
-  modelGridArray('obj/candle.gltf', new THREE.Vector3(0, -0.1, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0.1, 0), true, false, checkLoadingComplete);
+  modelGridArray('../obj/candle.gltf', new THREE.Vector3(0, -0.1, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0.1, 0), true, false, checkLoadingComplete);
 
-  modelGridArray('obj/ground.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0, 0), true, false, checkLoadingComplete);
+  modelGridArray('../obj/ground.gltf', new THREE.Vector3(0, 0, 0), new THREE.Vector3(3, 0, 3), new THREE.Vector3(27, 1, 27), new THREE.Vector3(0, 0, 0), true, false, checkLoadingComplete);
 }
 
 function init() {
@@ -221,12 +221,29 @@ function init() {
   
   // Chromatic Aberration
   chromaticAberrationPass = new ShaderPass(ChromaticAberrationShader);
-  chromaticAberrationPass.material.uniforms['aberrationIntensity'].value = 0.04; // Controls the maximum intensity of the effect
+  const aberrationIntensity = document.getElementById("aberration-intensity");
+  aberrationIntensity.addEventListener('input', (event) => {
+    chromaticAberrationPass.material.uniforms['aberrationIntensity'].value = parseFloat(event.target.value);
+  });
+
+  const aberrationSteps = document.getElementById("aberration-steps");
+  aberrationSteps.addEventListener('input', (event) => {
+    chromaticAberrationPass.material.uniforms['samples'].value = parseInt(event.target.value);
+  });
+
+  chromaticAberrationPass.material.uniforms['aberrationIntensity'].value = parseFloat(aberrationSteps.value);
+  chromaticAberrationPass.material.uniforms['aberrationIntensity'].value = parseFloat(aberrationIntensity.value);
   composer.addPass(chromaticAberrationPass);
-  
+
   // Create Grain pass and set uniforms
   grainPass = new ShaderPass(GrainShader);
-  grainPass.material.uniforms['grainIntensity'].value = 0.02;
+  // Get the slider for grain intensity
+  const grainIntensity = document.getElementById("grain-intensity");
+  grainIntensity.addEventListener('input', (event) => {
+    grainPass.material.uniforms['grainIntensity'].value = parseFloat(event.target.value);
+  });
+
+  grainPass.material.uniforms['grainIntensity'].value = parseFloat(grainIntensity.value);
   grainPass.material.uniforms['grainSize'].value = 2.0;
   grainPass.material.uniforms['height'].value = window.innerHeight;
   grainPass.material.uniforms['width'].value = window.innerWidth;
@@ -235,7 +252,21 @@ function init() {
   // ACES Tonemapping
   ACESPass = new ShaderPass(ACESShader);
   ACESPass.material.uniforms['Gamma'].value = 2.2;
-  ACESPass.material.uniforms['toneMappingExposure'].value = 1.0;
+  // Toggle for ACES
+  const ACESToggle = document.getElementById("aces-toggle");
+  ACESToggle.addEventListener('input', (event) => {
+    if (event.target.checked) {
+     ACESPass.material.uniforms['passthrough'].value = 1;
+    } else {
+      ACESPass.material.uniforms['passthrough'].value = 0;
+    }
+  });
+  const ACESExposure = document.getElementById("aces-exposure");
+  ACESExposure.addEventListener('input', (event) => {
+    ACESPass.material.uniforms['toneMappingExposure'].value = parseFloat(event.target.value);
+  });
+  ACESPass.material.uniforms['toneMappingExposure'].value = parseFloat(ACESExposure.value);
+  
   composer.addPass(ACESPass);
   
   composer.render();
